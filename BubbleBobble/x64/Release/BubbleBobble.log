@@ -1,0 +1,8 @@
+﻿  BubbleBobble.cpp
+  Main.cpp
+  Generating code
+  446 of 729 functions (61.2%) were compiled, the rest were copied from previous compilation.
+    160 functions were new in current compilation
+    50 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  BubbleBobble.vcxproj -> E:\DAE Files\Semester 4 (02.20 - 08.20)\Programming 4\Week_07-12 Engine\GameEngine\Build\x64\Release\BubbleBobble.exe

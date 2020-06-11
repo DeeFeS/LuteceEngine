@@ -1,0 +1,34 @@
+﻿  GameEnginePCH.cpp
+  AssetDatabase.cpp
+  Component.cpp
+  Font.cpp
+  GameObject.cpp
+  ImageComponent.cpp
+  InputManager.cpp
+  GameEngine.cpp
+  Logger.cpp
+  LuteceGame.cpp
+  Renderer.cpp
+  ResourceManager.cpp
+  Scene.cpp
+  SceneManager.cpp
+  ScriptableObject.cpp
+  Service.cpp
+  TestScene.cpp
+  TextComponent.cpp
+  Texture2D.cpp
+  Time.cpp
+  Transform.cpp
+  LuteceEngine.vcxproj -> E:\DAE Files\Semester 4 (02.20 - 08.20)\Programming 4\Week_07-12 Engine\GameEngine\Build\Win32\Release\LuteceEngine.lib
+  E:\DAE Files\Semester 4 (02.20 - 08.20)\Programming 4\Week_07-12 Engine\GameEngine\3rdParty\SDL2\lib\x86\SDL2.dll
+  1 File(s) copied
+  E:\DAE Files\Semester 4 (02.20 - 08.20)\Programming 4\Week_07-12 Engine\GameEngine\3rdParty\SDL2_image\lib\x86\libjpeg-9.dll
+  E:\DAE Files\Semester 4 (02.20 - 08.20)\Programming 4\Week_07-12 Engine\GameEngine\3rdParty\SDL2_image\lib\x86\libpng16-16.dll
+  E:\DAE Files\Semester 4 (02.20 - 08.20)\Programming 4\Week_07-12 Engine\GameEngine\3rdParty\SDL2_image\lib\x86\libtiff-5.dll
+  E:\DAE Files\Semester 4 (02.20 - 08.20)\Programming 4\Week_07-12 Engine\GameEngine\3rdParty\SDL2_image\lib\x86\libwebp-7.dll
+  E:\DAE Files\Semester 4 (02.20 - 08.20)\Programming 4\Week_07-12 Engine\GameEngine\3rdParty\SDL2_image\lib\x86\SDL2_image.dll
+  E:\DAE Files\Semester 4 (02.20 - 08.20)\Programming 4\Week_07-12 Engine\GameEngine\3rdParty\SDL2_image\lib\x86\zlib1.dll
+  6 File(s) copied
+  E:\DAE Files\Semester 4 (02.20 - 08.20)\Programming 4\Week_07-12 Engine\GameEngine\3rdParty\SDL2_ttf\lib\x86\libfreetype-6.dll
+  E:\DAE Files\Semester 4 (02.20 - 08.20)\Programming 4\Week_07-12 Engine\GameEngine\3rdParty\SDL2_ttf\lib\x86\SDL2_ttf.dll
+  2 File(s) copied
