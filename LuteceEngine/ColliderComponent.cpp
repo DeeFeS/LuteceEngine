@@ -25,8 +25,7 @@ void LuteceEngine::ColliderComponent::HandleCollision(const ColliderContact& con
 
 void LuteceEngine::ColliderComponent::Initialize()
 {
-	m_pScene = GetGameObject()->GetScene()->GetPhysicsScene();
-	m_pScene->AddCollider(this);
+	GetGameObject()->GetScene()->GetPhysicsScene()->AddCollider(this);
 }
 
 bool LuteceEngine::ColliderComponent::CalculateContact(ColliderContact& contact, ColliderComponent* pOther)

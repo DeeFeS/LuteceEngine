@@ -59,6 +59,8 @@ void LuteceEngine::Scene::InitializeRoot()
 		m_pGos[i]->Initialize(this);
 
 	m_IsInitialized = true;
+
+	PostInitialize();
 }
 
 void Scene::UpdateRoot()

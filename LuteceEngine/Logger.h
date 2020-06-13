@@ -31,8 +31,8 @@ namespace LuteceEngine
 		static wchar_t* m_pConvertBuffer;
 		static const size_t m_ConvertBufferSize = 1024;
 
-		Logger(void) {};
-		~Logger(void) {};
+		Logger() {};
+		~Logger() {};
 		Logger(const Logger& other) = delete;
 		Logger(Logger&& other) = delete;
 		Logger& operator=(const Logger& other) = delete;

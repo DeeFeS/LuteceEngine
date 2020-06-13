@@ -79,6 +79,7 @@
     <ClCompile Include="GameObject.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="EventSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ResourceManager.h">
@@ -110,7 +111,6 @@
     <ClInclude Include="Scene.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="TypeIDs.h" />
     <ClInclude Include="TextComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
@@ -170,6 +170,8 @@
     <ClInclude Include="GameObject.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="EngineComponentTypes.h" />
+    <ClInclude Include="Events.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Input">

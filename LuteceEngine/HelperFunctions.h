@@ -13,13 +13,19 @@
 //}
 
 template<typename T>
-inline void Clamp(T& value, T min, T max)
+inline void Clamp(T& value, const T min, const T max)
 {
 	if (value > max)
 		value = max;
 
 	if (value < min)
 		value = min;
+}
+
+template<typename T>
+float Remap(const T value, const T minCurrent, const T maxCurrent, const T minNew, const T maxNew)
+{
+	return minNew + (value - minCurrent) * (maxNew - minNew) / (maxCurrent - minCurrent);
 }
 
 inline float Dot(const glm::vec2& a, const glm::vec2& b)

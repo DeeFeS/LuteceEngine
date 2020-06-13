@@ -1,6 +1,8 @@
 #pragma once
 #include "HelperFunctions.h"
 #include "Logger.h"
+#include <iostream>
+#include <sstream>
 
 namespace LuteceEngine
 {
@@ -14,7 +16,7 @@ namespace LuteceEngine
 #ifdef _DEBUG
 			std::string name{ typeid(T).name() };
 			name = name.substr(6);
-			std::wstringstream wss;
+			std::wstringstream wss{};
 			wss << L"Service[" << name.c_str() << "] >> Initial service created";
 			Logger::LogInfo(wss.str());
 #endif
@@ -39,7 +41,7 @@ namespace LuteceEngine
 		static void ShutDown()
 		{
 #ifdef _DEBUG
-			std::wstringstream wss;
+			std::wstringstream wss{};
 			wss << L"Service[" << typeid(T).name() << "] >> Shut down";
 			Logger::LogInfo(wss.str());
 #endif
@@ -52,7 +54,7 @@ namespace LuteceEngine
 #ifdef _DEBUG
 			if (!m_pInitialService)
 			{
-				std::wstringstream wss;
+				std::wstringstream wss{};
 				wss << L"Service[" << typeid(T).name() << "]::Get >> Hasn't been initialized";
 				Logger::LogWarning(wss.str());
 			}
@@ -65,7 +67,7 @@ namespace LuteceEngine
 #ifdef _DEBUG
 			if (!m_pInitialService)
 			{
-				std::wstringstream wss;
+				std::wstringstream wss{};
 				wss << L"Service[" << typeid(T).name() << "]::Get >> Hasn't been initialized";
 				Logger::LogWarning(wss.str());
 			}

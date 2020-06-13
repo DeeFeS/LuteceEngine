@@ -16,7 +16,7 @@ LuteceEngine::GameObject::~GameObject()
 {
 	for (size_t i = 0; i < m_pComponents.size(); i++)
 	{
-		delete m_pComponents[i];
+		SafeDelete(m_pComponents[i]);
 	}
 }
 
@@ -28,7 +28,14 @@ void LuteceEngine::GameObject::Initialize(Scene* pScene)
 	m_pScene = pScene;
 
 	for (size_t i = 0; i < m_pComponents.size(); i++)
+		m_pComponents[i]->PreInitialize();
+
+	for (size_t i = 0; i < m_pComponents.size(); i++)
+	{
 		m_pComponents[i]->Initialize();
+		if (m_pComponents[i]->IsActive())
+			m_pComponents[i]->OnEnable();
+	}
 
 	m_IsInitialized = true;
 }

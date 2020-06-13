@@ -38,31 +38,49 @@ namespace LuteceEngine
 		None
 	};
 
-	enum class eButtonState
+	enum class eInputState
 	{
 		Pressed, Down, Released
+	};
+
+	enum class eControllerIdx
+	{
+		Controller1 = 0,
+		Controller2,
+		Controller3,
+		Controller4,
+		Keyboard,
 	};
 
 	class ButtonCommand : public CallbackCommand<bool>
 	{
 	public:
-		ButtonCommand(const int controllerIdx, const eControllerButton button, const eButtonState state);
+		ButtonCommand(const eControllerIdx controllerIdx, const int key, const eControllerButton button, const eInputState state);
+		const eControllerIdx GetControllerIdx() const { return m_ControllerIdx; };
+		const int GetKey() const { return m_Key; };
 		const eControllerButton GetButton() const { return m_Button; };
-		const eButtonState GetButtonState() const { return m_ButtonState; };
+		const eInputState GetInputState() const { return m_InputState; };
+
 	private:
-		const int m_ControllerIdx;
+		const eControllerIdx m_ControllerIdx;
+		const int m_Key;
 		const eControllerButton m_Button;
-		const eButtonState m_ButtonState;
+		const eInputState m_InputState;
 	};
 
-	class AxisCommand : public CallbackCommand<float>
+	class AxisCommand : public CallbackCommand<bool, float>
 	{
 	public:
-		AxisCommand(const int controllerIdx, const eControllerAxis axis, const float deadZone);
+		AxisCommand(const eControllerIdx controllerIdx, const int keyPositive, const int keyNegative, const eControllerAxis axis, const float deadZone = 0.1f);
+		const eControllerIdx GetControllerIdx() const { return m_ControllerIdx; };
+		const int GetPositiveKey() const { return m_Positive; };
+		const int GetNegativeKey() const { return m_Negative; };
 		const eControllerAxis GetAxis() const { return m_Axis; };
 		const float GetDeadZone() const { return m_DeadZone; };
+
 	private:
-		const int m_ControllerIdx;
+		const eControllerIdx m_ControllerIdx;
+		const int m_Positive, m_Negative;
 		const eControllerAxis m_Axis;
 		const float m_DeadZone;
 	};
@@ -85,11 +103,13 @@ namespace LuteceEngine
 	{
 	public:
 		bool ProcessInput();
-		bool IsPressed(const eControllerButton button, const eButtonState state) const;
+		bool IsPressed(const ButtonCommand* pButton) const;
+		float GetAxis(const AxisCommand* pAxis) const;
 		
 		void Update();
 		
-		void AddCommand(ButtonCommand* pCommand) { m_pCommands.push_back(pCommand); };
+		void AddCommand(ButtonCommand* pCommand) { m_pButtonCommands.push_back(pCommand); };
+		void AddCommand(AxisCommand* pCommand) { m_pAxisCommands.push_back(pCommand); };
 		
 		InputManager(const InputManager& other) = delete;
 		InputManager(InputManager&& other) = delete;
@@ -101,6 +121,7 @@ namespace LuteceEngine
 		~InputManager();
 		ControllerInput m_Controller[4];
 		KeyboardInput m_Keyboard;
-		std::vector<ButtonCommand*> m_pCommands;
+		std::vector<ButtonCommand*> m_pButtonCommands;
+		std::vector<AxisCommand*> m_pAxisCommands;
 	};
 }

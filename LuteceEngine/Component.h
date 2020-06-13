@@ -1,6 +1,7 @@
 #pragma once
+#include "GameEnginePCH.h"
 #include "Renderer.h"
-#include "TypeIDs.h"
+#include "EngineComponentTypes.h"
 
 namespace LuteceEngine
 {
@@ -28,6 +29,7 @@ namespace LuteceEngine
 		Component& operator=(Component&& other) = delete;
 
 	protected:
+		virtual void PreInitialize() {};
 		virtual void Initialize() {};
 		virtual void Update() {};
 		virtual void FixedUpdate() {};

@@ -14,7 +14,7 @@ public:
 	void SetOffset(const glm::vec2& offset) { m_Offset = offset; };
 	void SetSource(const int x, const int y, const int width, const int height);
 
-	virtual ~ImageComponent() = default;
+	virtual ~ImageComponent() override = default;
 	ImageComponent(const ImageComponent& other) = delete;
 	ImageComponent(ImageComponent&& other) = delete;
 	ImageComponent& operator=(const ImageComponent& other) = delete;

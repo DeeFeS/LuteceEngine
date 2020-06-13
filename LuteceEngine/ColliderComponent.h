@@ -28,7 +28,7 @@ namespace LuteceEngine
 	{
 	public:
 		ColliderComponent(PhysicsShape* pShape, const bool isStatic = false);
-		~ColliderComponent();
+		virtual ~ColliderComponent() override;
 		PhysicsScene* GetPhysicsScene() { return m_pScene; }
 		PhysicsShape* GetShape() { return m_pShape; }
 		bool IsStatic() { return m_IsStatic; }
@@ -40,6 +40,7 @@ namespace LuteceEngine
 		virtual void Initialize() override;
 	private:
 		friend class PhysicsScene;
+		void SetScene(PhysicsScene* pScene) { m_pScene = pScene; };
 
 		PhysicsScene* m_pScene;
 		PhysicsShape* m_pShape;

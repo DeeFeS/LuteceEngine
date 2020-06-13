@@ -17,6 +17,7 @@ public:
 protected:
 	// Inherited via Scene
 	virtual void Initialize() override;
+	virtual void PostInitialize() override;
 	virtual void SceneUpdate() override;
 	virtual void SceneFixedUpdate() override;
 	virtual void SceneCleanUp() const override;

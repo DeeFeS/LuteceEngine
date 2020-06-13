@@ -56,6 +56,7 @@ void LuteceEngine::PhysicsScene::AddCollider(ColliderComponent* pCollider)
 
 	auto& pVec = pCollider->IsStatic() ? m_pStaticCollider : m_pNonStaticCollider;
 	pVec.push_back(pCollider);
+	pCollider->SetScene(this);
 }
 
 void LuteceEngine::PhysicsScene::RemoveCollider(ColliderComponent* pCollider)
@@ -71,6 +72,7 @@ void LuteceEngine::PhysicsScene::RemoveCollider(ColliderComponent* pCollider)
 				Logger::LogException(L"PhysicsScene::RemoveCollider >> Collider not registered to this PhysicsScene");
 #endif
 			pVec.erase(pVec.cbegin() + i);
+			pCollider->SetScene(nullptr);
 			return;
 		}
 	}

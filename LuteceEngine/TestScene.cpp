@@ -35,18 +35,23 @@ void TestScene::Initialize()
 	pGO->GetTransform()->SetPosition(216, 180);
 
 	pGO = new GameObject();
-	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
-	auto pText = new TextComponent("Programming 4 Assignment", font);
+	auto pFont = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
+	auto pText = new TextComponent("Programming 4 Assignment", pFont);
+	pText->SetAlignment(eAlignment::Left);
 	pGO->AddComponent(pText);
 	Add(pGO);
 	pGO->GetTransform()->SetPosition(80, 50);
 
 	pGO = new GameObject();
-	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 24);
-	m_pFps = new TextComponent("FPS: ", font, { 255, 0, 0 });
+	pFont = ResourceManager::GetInstance().LoadFont("Lingua.otf", 24);
+	m_pFps = new TextComponent("FPS: ", pFont, { 255, 0, 0 });
 	pGO->AddComponent(m_pFps);
 	Add(pGO);
 	pGO->GetTransform()->SetPosition(0, 0);
+}
+
+void TestScene::PostInitialize()
+{
 }
 
 void TestScene::SceneUpdate()

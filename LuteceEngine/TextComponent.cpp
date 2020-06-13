@@ -7,7 +7,7 @@
 #include "Font.h"
 #include "Texture2D.h"
 
-LuteceEngine::TextComponent::TextComponent(const std::string& text, Font* font, SDL_Color color)
+LuteceEngine::TextComponent::TextComponent(const std::string& text, Font* font, SDL_Color color, eAlignment alignment)
 	: Component((int)eEngineComponentType::Text)
 	, m_IsDirty(true)
 	, m_Text(text)
@@ -15,6 +15,7 @@ LuteceEngine::TextComponent::TextComponent(const std::string& text, Font* font, 
 	, m_pTexture()
 	, m_Color(color)
 	, m_Offset{}
+	, m_Alignment{alignment}
 { }
 
 LuteceEngine::TextComponent::~TextComponent()
@@ -47,7 +48,17 @@ void LuteceEngine::TextComponent::Render(std::vector<RenderBuffer>& renderBuffer
 	{
 		const auto pTrans = GetGameObject()->GetTransform();
 		const auto scale = pTrans->GetWorldScale();
-		const auto pos = pTrans->GetWorldPosition() + m_Offset * scale;
+		auto pos = pTrans->GetWorldPosition() + m_Offset * scale;
+		switch (m_Alignment)
+		{
+		//case LuteceEngine::eAlignment::Left: break;
+		case LuteceEngine::eAlignment::Right:
+			pos.x -= m_pTexture->GetWidth() * scale.x;
+			break;
+		case LuteceEngine::eAlignment::Center:
+			pos.x -= m_pTexture->GetWidth() * scale.x / 2.f;
+			break;
+		}
 		SDL_Rect dest{ (int)pos.x, (int)pos.y, (int)(m_pTexture->GetWidth() * scale.x), (int)(m_pTexture->GetHeight() * scale.y) };
 		Service<Renderer>::Get()->AddTextureToBuffer(renderBuffer, m_pTexture, pTrans->GetDepth(), dest);
 	}

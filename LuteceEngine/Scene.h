@@ -32,6 +32,7 @@ namespace LuteceEngine
 		const std::vector<GameObject*>& GetGameObjects() const { return m_pGos; }
 
 		virtual void Initialize() = 0;
+		virtual void PostInitialize() = 0;
 		virtual void SceneUpdate() = 0;
 		virtual void SceneFixedUpdate() = 0;
 		virtual void SceneCleanUp() const = 0;

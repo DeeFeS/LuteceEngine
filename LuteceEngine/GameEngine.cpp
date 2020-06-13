@@ -6,7 +6,6 @@
 #include "SceneManager.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
-#include <SDL.h>
 #include "TextComponent.h"
 #include "GameObject.h"
 #include "Scene.h"
@@ -20,8 +19,11 @@ using namespace std;
 using namespace std::chrono;
 using namespace LuteceEngine;
 
+WindowSettings GameEngine::m_Window = { 640, 480 };
+
 LuteceEngine::GameEngine::GameEngine()
 	: m_pGame{ nullptr }
+	, m_pWindow{ nullptr }
 {}
 
 LuteceEngine::GameEngine::~GameEngine()
@@ -48,8 +50,8 @@ void GameEngine::InitializeEngine()
 		"Programming 4 assignment",
 		SDL_WINDOWPOS_UNDEFINED,
 		SDL_WINDOWPOS_UNDEFINED,
-		640,
-		480,
+		m_Window.width,
+		m_Window.height,
 		SDL_WINDOW_OPENGL
 	);
 	if (m_pWindow == nullptr)
@@ -95,7 +97,7 @@ void GameEngine::ShutDownEngine()
 
 }
 
-void GameEngine::Run(LuteceGame* pGame)
+void GameEngine::Run(LuteceGame* pGame, WindowSettings settings)
 {
 	if (!pGame)
 	{
@@ -104,6 +106,7 @@ void GameEngine::Run(LuteceGame* pGame)
 	}
 
 	m_pGame = pGame;
+	m_Window = settings;
 	try
 	{
 		InitializeEngine();
@@ -143,6 +146,8 @@ void GameEngine::GameLoop()
 		time.Update();
 
 		isRunning = input.ProcessInput();
+		input.Update();
+
 		sceneManager.Update();
 
 		while (time.GetFixedTick() > timeSettings.fixedTimeStep)

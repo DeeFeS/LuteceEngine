@@ -24,7 +24,7 @@ namespace LuteceEngine
 			if (m_pCallback)
 				return m_pCallback(args...);
 			return NULL;
-		}
+		};
 
 		void SetCallback(std::function<TReturn(Args...)> pCallback) { m_pCallback = pCallback; };
 	private:

@@ -21,7 +21,7 @@ void LuteceEngine::Renderer::Render()
 	
 	std::sort(m_RenderBuffer.begin(), m_RenderBuffer.end(), [](const RenderBuffer& a, const RenderBuffer& b) { return a.depth > b.depth; });
 	for (size_t i = 0; i < m_RenderBuffer.size(); i++)
-		SDL_RenderCopy(GetSDLRenderer(), m_RenderBuffer[i].pTexture->GetSDLTexture(), nullptr, &m_RenderBuffer[i].destRect);
+		SDL_RenderCopy(GetSDLRenderer(), m_RenderBuffer[i].pTexture->GetSDLTexture(), &m_RenderBuffer[i].srcRect, &m_RenderBuffer[i].destRect);
 	m_RenderBuffer.clear();
 
 	SDL_RenderPresent(m_pRenderer);
