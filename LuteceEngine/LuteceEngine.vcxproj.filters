@@ -80,6 +80,9 @@
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="EventSystem.cpp" />
+    <ClCompile Include="CameraComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ResourceManager.h">
@@ -170,8 +173,13 @@
     <ClInclude Include="GameObject.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="EngineComponentTypes.h" />
     <ClInclude Include="Events.h" />
+    <ClInclude Include="CameraComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineComponentTypes.h">
+      <Filter>Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Input">

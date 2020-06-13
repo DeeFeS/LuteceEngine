@@ -10,15 +10,18 @@ using namespace LuteceEngine;
 Scene::Scene(const std::string& name)
 	: m_Name(name)
 	, m_IsInitialized(false)
-	, m_pPhysics{nullptr}
+	, m_pPhysics{ nullptr }
+	, m_pActiveCamera{ nullptr }
+	, m_pBaseCamera{ nullptr }
 {}
 
 Scene::~Scene()
 {
 	SafeDelete(m_pPhysics);
+	m_pBaseCamera->GetGameObject()->DestroyImmediate();
 }
 
-void LuteceEngine::Scene::Add(GameObject * pObject)
+void LuteceEngine::Scene::Add(GameObject* pObject)
 {
 #ifdef _DEBUG
 	if (pObject->GetScene())
@@ -50,6 +53,12 @@ void LuteceEngine::Scene::InitializeRoot()
 		return;
 
 	m_pPhysics = new PhysicsScene{ this };
+	m_pBaseCamera = new CameraComponent{};
+	auto pGo = new GameObject();
+	pGo->AddComponent(m_pBaseCamera);
+	pGo->Initialize(this);
+
+	m_pActiveCamera = m_pBaseCamera;
 
 	Service<SceneManager>::Get()->AddScene(this);
 

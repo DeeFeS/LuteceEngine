@@ -158,6 +158,6 @@ void GameEngine::GameLoop()
 
 		sceneManager.CleanUp();
 
-		renderer.Render();
+		renderer.Render(sceneManager.GetActiveScene()->GetActiveCamera());
 	}
 }

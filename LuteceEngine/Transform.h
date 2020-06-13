@@ -38,7 +38,8 @@ namespace LuteceEngine
 		void SetDepth(float depth) { m_Depth = depth; };
 		void Move(const float x, const float y, const float depth = 0.f);
 		void SetScale(const float x, const float y) { m_Scale = glm::vec2{ x, y }; };
-		
+		void Scale(const float x, const float y) { m_Scale += glm::vec2{ x, y }; };
+
 		//void SetRotation(const float angle, const bool isDegrees = true);
 		//void Rotate(const float angle, const  bool isDegrees = true);
 	private:

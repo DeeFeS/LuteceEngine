@@ -60,7 +60,8 @@ void LuteceEngine::TextComponent::Render(std::vector<RenderBuffer>& renderBuffer
 			break;
 		}
 		SDL_Rect dest{ (int)pos.x, (int)pos.y, (int)(m_pTexture->GetWidth() * scale.x), (int)(m_pTexture->GetHeight() * scale.y) };
-		Service<Renderer>::Get()->AddTextureToBuffer(renderBuffer, m_pTexture, pTrans->GetDepth(), dest);
+		SDL_Rect src{ 0, 0, (int)(m_pTexture->GetWidth() * scale.x), (int)(m_pTexture->GetHeight() * scale.y) };
+		Service<Renderer>::Get()->AddTextureToBuffer(renderBuffer, m_pTexture, pTrans->GetDepth(), dest, src);
 	}
 }
 

@@ -18,14 +18,16 @@ namespace LuteceEngine
 		float depth;
 	};
 
+	class CameraComponent;
+
 	class Renderer final
 	{
 	public:
 		void Initialize(SDL_Window* window);
-		void Render();
+		void Render(const CameraComponent* pCamera);
 
 		void AddTextureToBuffer(std::vector<RenderBuffer>& renderBuffer, Texture2D* pTexture, const float depth, const glm::vec2& pos) const;
-		void AddTextureToBuffer(std::vector<RenderBuffer>& renderBuffer, Texture2D* pTexture, const float depth, const SDL_Rect& dest, const SDL_Rect& src = {}) const;
+		void AddTextureToBuffer(std::vector<RenderBuffer>& renderBuffer, Texture2D* pTexture, const float depth, const SDL_Rect& dest, const SDL_Rect& src) const;
 
 		SDL_Renderer* GetSDLRenderer() const { return m_pRenderer; }
 	private:
@@ -36,6 +38,7 @@ namespace LuteceEngine
 		
 		SDL_Renderer* m_pRenderer;
 		std::vector<RenderBuffer> m_RenderBuffer;
+		glm::vec2 m_HalfWindow;
 
 		Renderer(const Renderer& other) = delete;
 		Renderer(Renderer&& other) = delete;

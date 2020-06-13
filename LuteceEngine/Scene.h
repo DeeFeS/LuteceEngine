@@ -4,6 +4,7 @@
 #include "Transform.h"
 #include "GameObject.h"
 #include "PhysicsScene.h"
+#include "CameraComponent.h"
 
 namespace LuteceEngine
 {
@@ -19,7 +20,8 @@ namespace LuteceEngine
 		void CleanUpRoot();
 		void RenderRoot(std::vector<RenderBuffer>& renderBuffer) const;
 		void ShutDownRoot();
-
+		void SetActiveCamera(CameraComponent* pCamera) { m_pActiveCamera = pCamera ? pCamera : m_pBaseCamera; };
+		CameraComponent* GetActiveCamera() { return m_pActiveCamera; }
 		PhysicsScene* GetPhysicsScene() { return m_pPhysics; }
 
 		virtual ~Scene();
@@ -43,6 +45,8 @@ namespace LuteceEngine
 		std::string m_Name;
 		std::vector<GameObject*> m_pGos{};
 		PhysicsScene* m_pPhysics;
+		CameraComponent* m_pActiveCamera;
+		CameraComponent* m_pBaseCamera;
 
 		bool m_IsInitialized;
 	};

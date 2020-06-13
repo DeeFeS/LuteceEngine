@@ -25,6 +25,7 @@ private:
 	const int m_LevelWidth{ 32 };
 	const int m_LevelHeight{ 24 };
 	const int m_TileSize{ 16 };
+	GameObject* m_pCamera;
 
 	LevelScene(const LevelScene& other) = delete;
 	LevelScene(LevelScene&& other) = delete;
