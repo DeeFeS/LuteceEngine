@@ -9,6 +9,9 @@ namespace LuteceEngine
 	{
 	public:
 		SDL_Texture* GetSDLTexture() const;
+		int GetWidth() { return m_Width; }
+		int GetHeight() { return m_Height; }
+
 		explicit Texture2D(SDL_Texture* texture);
 		~Texture2D();
 
@@ -18,5 +21,7 @@ namespace LuteceEngine
 		Texture2D & operator= (const Texture2D &&) = delete;
 	private:
 		SDL_Texture* m_pTexture;
+		int m_Width;
+		int m_Height;
 	};
 }

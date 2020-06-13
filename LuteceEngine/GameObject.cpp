@@ -3,6 +3,7 @@
 #include "ResourceManager.h"
 #include "Renderer.h"
 #include "Logger.h"
+#include "Scene.h"
 
 LuteceEngine::GameObject::GameObject()
 	: m_pTransform{ nullptr }
@@ -17,7 +18,6 @@ LuteceEngine::GameObject::~GameObject()
 	{
 		delete m_pComponents[i];
 	}
-	delete m_pTransform;
 }
 
 void LuteceEngine::GameObject::Initialize(Scene* pScene)
@@ -65,29 +65,29 @@ void LuteceEngine::GameObject::Render(std::vector<RenderBuffer>& renderBuffer) c
 
 void LuteceEngine::GameObject::OnDestroy()
 {
-	for (int i = int(m_pChildren.size()) - 1; i >= 0; i--)
+	auto pChildren = m_pTransform->GetChildren();
+	for (int i = int(pChildren.size()) - 1; i >= 0; i--)
 	{
-		m_pChildren[i]->OnDisable();
-		m_pChildren[i]->OnDestroy();
-		delete m_pChildren[i];
-		m_pChildren[i] = m_pChildren.back();
-		m_pChildren.pop_back();
+		auto pGo = pChildren[i]->GetGameObject();
+		pGo->OnDisable();
+		pGo->OnDestroy();
+		m_pTransform->DestroyChild(size_t(i));
 	}
 
 	for (int i = int(m_pComponents.size()) - 1; i >= 0; i--)
 	{
 		m_pComponents[i]->OnDisable();
 		m_pComponents[i]->OnDestroy();
-		delete m_pComponents[i];
-		m_pComponents[i] = m_pComponents.back();
-		m_pComponents.pop_back();
+		SafeDelete(m_pComponents[i]);
 	}
+	m_pComponents.clear();
 }
 
 void LuteceEngine::GameObject::OnEnable()
 {
-	for (int i = int(m_pChildren.size()) - 1; i >= 0; i--)
-		m_pChildren[i]->OnEnable();
+	auto pChildren = m_pTransform->GetChildren();
+	for (int i = int(pChildren.size()) - 1; i >= 0; i--)
+		pChildren[i]->GetGameObject()->OnEnable();
 
 	for (int i = int(m_pComponents.size()) - 1; i >= 0; i--)
 		m_pComponents[i]->OnEnable();
@@ -95,11 +95,24 @@ void LuteceEngine::GameObject::OnEnable()
 
 void LuteceEngine::GameObject::OnDisable()
 {
-	for (int i = int(m_pChildren.size()) - 1; i >= 0; i--)
-		m_pChildren[i]->OnDisable();
+	auto pChildren = m_pTransform->GetChildren();
+	for (int i = int(pChildren.size()) - 1; i >= 0; i--)
+		pChildren[i]->GetGameObject()->OnDisable();
 
 	for (int i = int(m_pComponents.size()) - 1; i >= 0; i--)
 		m_pComponents[i]->OnDisable();
+}
+
+bool LuteceEngine::GameObject::IsEnabled() const
+{
+	if (!m_IsEnabled)
+		return false;
+
+	bool ret = true;
+	auto pParent = m_pTransform->GetParent();
+	if (pParent)
+		ret = pParent->GetGameObject()->IsEnabled();
+	return ret;
 }
 
 void LuteceEngine::GameObject::SetEnabled(const bool enabled)
@@ -133,7 +146,6 @@ void LuteceEngine::GameObject::AddComponent(Component* pComponent)
 
 void LuteceEngine::GameObject::RemoveComponent(Component* pComponent, const bool deleteComponent)
 {
-
 	for (size_t i = 0; i < m_pComponents.size(); i++)
 	{
 		if (m_pComponents[i] == pComponent)
@@ -158,14 +170,9 @@ void LuteceEngine::GameObject::RemoveComponent(Component* pComponent, const bool
 #ifdef _DEBUG
 	auto pGo = pComponent->GetGameObject();
 	if (!pGo)
-	{
 		Logger::LogWarning(L"GO::RemoveComponent >> Component not attached to an object");
-	}
 	else if (pGo != this)
-	{
 		Logger::LogWarning(L"GO::RemoveComponent >> Component is attached to a different object");
-		return;
-	}
 #endif
 }
 
@@ -186,18 +193,20 @@ bool LuteceEngine::GameObject::IsComponentAttached(Component* pComponent)
 
 void LuteceEngine::GameObject::CleanUp()
 {
-	for (int i = int(m_pChildren.size()) - 1; i >= 0; i--)
+	auto pChildren = m_pTransform->GetChildren();
+
+	for (int i = int(pChildren.size()) - 1; i >= 0; i--)
 	{
-		if (!m_pChildren[i]->IsDestroyed())
+		auto pGo = pChildren[i]->GetGameObject();
+		if (!pGo->IsDestroyed())
 		{
-			m_pChildren[i]->CleanUp();
+			pGo->CleanUp();
 			continue;
 		}
 
-		m_pChildren[i]->OnDestroy();
-		delete m_pChildren[i];
-		m_pChildren[i] = m_pChildren.back();
-		m_pChildren.pop_back();
+		pGo->OnDisable();
+		pGo->OnDestroy();
+		m_pTransform->DestroyChild(size_t(i));
 	}
 
 	for (int i = int(m_pComponents.size()) - 1; i >= 0; i--)
@@ -206,8 +215,7 @@ void LuteceEngine::GameObject::CleanUp()
 			continue;
 
 		m_pComponents[i]->OnDestroy();
-		delete m_pComponents[i];
-		m_pComponents[i] = m_pComponents.back();
-		m_pComponents.pop_back();
+		SafeDelete(m_pComponents[i]);
+		m_pComponents.erase(m_pComponents.cbegin() + i);
 	}
 }

@@ -1,7 +1,8 @@
 #pragma once
 
-enum class eComponentType
+enum class eEngineComponentType : int
 {
-	Text_Component = 0,
-	Image_Component = 1,
+	Collider = 0,
+	Text,
+	Image,
 };

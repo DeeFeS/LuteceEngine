@@ -19,10 +19,10 @@ namespace LuteceEngine
 	class CallbackCommand : public Command<TReturn, Args...>
 	{
 	public:
-		virtual TReturn Execute(Args...) override
+		virtual TReturn Execute(Args... args) override
 		{
 			if (m_pCallback)
-				return m_pCallback(Args...);
+				return m_pCallback(args...);
 			return NULL;
 		}
 
@@ -35,10 +35,10 @@ namespace LuteceEngine
 	class CallbackVectorCommand : public Command<void, Args...>
 	{
 	public:
-		virtual void Execute(Args...) override
+		virtual void Execute(Args... args) override
 		{
 			for (size_t i = 0; i < m_pCallbacks.size(); i++)
-				m_pCallbacks[i](Args...);
+				m_pCallbacks[i](args...);
 		}
 
 		void AddCallback(std::function<void(Args...)> pCallback)

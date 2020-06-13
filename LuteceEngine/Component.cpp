@@ -7,7 +7,7 @@ using namespace LuteceEngine;
 
 size_t LuteceEngine::Component::m_NextId{ 0 };
 
-LuteceEngine::Component::Component(eComponentType typeId)
+LuteceEngine::Component::Component(int typeId)
 	: m_Type{ typeId }
 	, m_Id{ m_NextId++ }
 	, m_pGameObject{ nullptr }
@@ -22,6 +22,8 @@ void LuteceEngine::Component::SetGameObject(GameObject* pGameObject)
 		m_pGameObject->RemoveComponent(this, false);
 
 	m_pGameObject = pGameObject;
+
+	m_IsActive = m_pGameObject;
 }
 
 Transform* LuteceEngine::Component::GetTransform() const

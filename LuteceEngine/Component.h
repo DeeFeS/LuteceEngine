@@ -10,12 +10,12 @@ namespace LuteceEngine
 	class Component
 	{
 	public:
-		Component(eComponentType typeId);
+		Component(int typeId);
 		virtual ~Component() = default;
 		GameObject* GetGameObject() const { return m_pGameObject; };
 		Transform* GetTransform() const;
 		size_t GetId() const { return m_Id; };
-		eComponentType GetType() const { return m_Type; };
+		int GetType() const { return m_Type; };
 
 		bool IsActive() const { return m_IsActive; }
 		void SetActive(const bool active) { m_IsActive = active; }
@@ -45,7 +45,7 @@ namespace LuteceEngine
 		bool m_IsActive = true;
 		bool m_IsDestroyed = false;
 		static size_t m_NextId;
-		eComponentType m_Type;
+		int m_Type;
 		size_t m_Id;
 		GameObject* m_pGameObject;
 	};

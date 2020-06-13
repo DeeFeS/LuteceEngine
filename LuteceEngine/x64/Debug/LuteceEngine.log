@@ -1,4 +1,18 @@
-﻿  FiniteStateMachine.cpp
+﻿  ColliderComponent.cpp
+  Component.cpp
+  GameEngine.cpp
+  GameObject.cpp
+  ImageComponent.cpp
+  Physics.cpp
+  PhysicsScene.cpp
+  Renderer.cpp
+  ResourceManager.cpp
+  Scene.cpp
+  SceneManager.cpp
+  TestScene.cpp
+  TextComponent.cpp
+  Transform.cpp
+  Generating Code...
   LuteceEngine.vcxproj -> D:\DAE\Semester 4 (02.20 - 06.20)\Programming 4\LuteceEngine\Build\x64\Debug\LuteceEngine.lib
   D:\DAE\Semester 4 (02.20 - 06.20)\Programming 4\LuteceEngine\3rdParty\SDL2\lib\x64\SDL2.dll
   1 File(s) copied

@@ -21,30 +21,31 @@ void LuteceEngine::Renderer::Render()
 	
 	std::sort(m_RenderBuffer.begin(), m_RenderBuffer.end(), [](const RenderBuffer& a, const RenderBuffer& b) { return a.depth > b.depth; });
 	for (size_t i = 0; i < m_RenderBuffer.size(); i++)
-		SDL_RenderCopy(GetSDLRenderer(), m_RenderBuffer[i].pTexture->GetSDLTexture(), nullptr, &m_RenderBuffer[i].rect);
+		SDL_RenderCopy(GetSDLRenderer(), m_RenderBuffer[i].pTexture->GetSDLTexture(), nullptr, &m_RenderBuffer[i].destRect);
 	m_RenderBuffer.clear();
 
 	SDL_RenderPresent(m_pRenderer);
 }
 
-void LuteceEngine::Renderer::AddTextureToBuffer(std::vector<RenderBuffer>& renderBuffer, Texture2D* pTexture, const float x, const float y, const float z) const
+void LuteceEngine::Renderer::AddTextureToBuffer(std::vector<RenderBuffer>& renderBuffer, Texture2D* pTexture, const float depth, const glm::vec2& pos) const
 {
 	int width, height;
 	SDL_QueryTexture(pTexture->GetSDLTexture(), nullptr, nullptr, &width, &height);
-	AddTextureToBuffer(renderBuffer, pTexture, x, y, z, float(width), float(height));
+	SDL_Rect dest{};
+	dest.x = static_cast<int>(pos.x);
+	dest.y = static_cast<int>(pos.y);
+	dest.w = static_cast<int>(width);
+	dest.h = static_cast<int>(height);
+	AddTextureToBuffer(renderBuffer, pTexture, depth, dest, SDL_Rect{});
 }
 
-void LuteceEngine::Renderer::AddTextureToBuffer(std::vector<RenderBuffer>& renderBuffer, Texture2D* pTexture, const float x, const float y, const float z, const float width, const float height) const
+void LuteceEngine::Renderer::AddTextureToBuffer(std::vector<RenderBuffer>& renderBuffer, Texture2D* pTexture, const float depth, const SDL_Rect& dest, const SDL_Rect& src) const
 {
-	SDL_Rect dst;
-	dst.x = static_cast<int>(x);
-	dst.y = static_cast<int>(y);
-	dst.w = static_cast<int>(width);
-	dst.h = static_cast<int>(height);
 	RenderBuffer newBuffer{};
 	newBuffer.pTexture = pTexture;
-	newBuffer.rect = dst;
-	newBuffer.depth = z;
+	newBuffer.destRect = dest;
+	newBuffer.srcRect = src;
+	newBuffer.depth = depth;
 	renderBuffer.push_back(newBuffer);
 }
 

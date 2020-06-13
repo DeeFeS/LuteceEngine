@@ -13,7 +13,11 @@ SDL_Texture* LuteceEngine::Texture2D::GetSDLTexture() const
 	return m_pTexture;
 }
 
-LuteceEngine::Texture2D::Texture2D(SDL_Texture* texture)
+LuteceEngine::Texture2D::Texture2D(SDL_Texture* pTexture)
+	: m_pTexture{pTexture}
+	, m_Width{0}
+	, m_Height{0}
 {
-	m_pTexture = texture;
+	if (m_pTexture)
+		SDL_QueryTexture(m_pTexture, nullptr, nullptr, &m_Width, &m_Height);
 }

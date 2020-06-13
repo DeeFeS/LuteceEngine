@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <Windows.h>
 
 // DISCLAIMER:: Dumbed down version of the Overlord-Engine Logger by Matthieu Delaere
 

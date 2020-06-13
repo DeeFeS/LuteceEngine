@@ -1,6 +1,7 @@
 #pragma once
 #include "Service.h"
 #include "SDL.h"
+#include <vector>
 
 namespace LuteceEngine
 {
@@ -12,7 +13,8 @@ namespace LuteceEngine
 	struct RenderBuffer
 	{
 		Texture2D* pTexture;
-		SDL_Rect rect;
+		SDL_Rect destRect;
+		SDL_Rect srcRect;
 		float depth;
 	};
 
@@ -22,8 +24,8 @@ namespace LuteceEngine
 		void Initialize(SDL_Window* window);
 		void Render();
 
-		void AddTextureToBuffer(std::vector<RenderBuffer>& renderBuffer, Texture2D* pTexture, const float x, const float y, const float z) const;
-		void AddTextureToBuffer(std::vector<RenderBuffer>& renderBuffer, Texture2D* pTexture, const float x, const float y, const float z, const float width, const float height) const;
+		void AddTextureToBuffer(std::vector<RenderBuffer>& renderBuffer, Texture2D* pTexture, const float depth, const glm::vec2& pos) const;
+		void AddTextureToBuffer(std::vector<RenderBuffer>& renderBuffer, Texture2D* pTexture, const float depth, const SDL_Rect& dest, const SDL_Rect& src = {}) const;
 
 		SDL_Renderer* GetSDLRenderer() const { return m_pRenderer; }
 	private:

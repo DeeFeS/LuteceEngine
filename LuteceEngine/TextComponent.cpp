@@ -8,12 +8,13 @@
 #include "Texture2D.h"
 
 LuteceEngine::TextComponent::TextComponent(const std::string& text, Font* font, SDL_Color color)
-	: Component(eComponentType::Text_Component)
+	: Component((int)eEngineComponentType::Text)
 	, m_IsDirty(true)
 	, m_Text(text)
 	, m_pFont(font)
 	, m_pTexture()
 	, m_Color(color)
+	, m_Offset{}
 { }
 
 LuteceEngine::TextComponent::~TextComponent()
@@ -34,7 +35,7 @@ void LuteceEngine::TextComponent::Update()
 			throw std::runtime_error(std::string("Create text texture from surface failed: ") + SDL_GetError());
 
 		SDL_FreeSurface(surf);
-		delete m_pTexture;
+		SafeDelete(m_pTexture);
 		m_pTexture = new Texture2D(texture);
 		m_IsDirty = false;
 	}
@@ -44,8 +45,11 @@ void LuteceEngine::TextComponent::Render(std::vector<RenderBuffer>& renderBuffer
 {
 	if (m_pTexture != nullptr)
 	{
-		const auto pos = GetTransform()->GetPosition();
-		Service<Renderer>::Get()->AddTextureToBuffer(renderBuffer, m_pTexture, pos.x, pos.y, pos.z);
+		const auto pTrans = GetGameObject()->GetTransform();
+		const auto scale = pTrans->GetWorldScale();
+		const auto pos = pTrans->GetWorldPosition() + m_Offset * scale;
+		SDL_Rect dest{ (int)pos.x, (int)pos.y, (int)(m_pTexture->GetWidth() * scale.x), (int)(m_pTexture->GetHeight() * scale.y) };
+		Service<Renderer>::Get()->AddTextureToBuffer(renderBuffer, m_pTexture, pTrans->GetDepth(), dest);
 	}
 }
 
@@ -60,9 +64,4 @@ void LuteceEngine::TextComponent::SetColor(SDL_Color& color)
 {
 	m_Color = color;
 	m_IsDirty = true;
-}
-
-void LuteceEngine::TextComponent::SetPosition(const float x, const float y)
-{
-	GetTransform()->SetPosition(x, y);
 }

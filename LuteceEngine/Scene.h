@@ -3,10 +3,11 @@
 #include "SceneManager.h"
 #include "Transform.h"
 #include "GameObject.h"
+#include "PhysicsScene.h"
 
 namespace LuteceEngine
 {
-	class Scene : public std::enable_shared_from_this<Scene>
+	class Scene // : public std::enable_shared_from_this<Scene>
 	{
 	public:
 		Scene(const std::string& name);
@@ -18,6 +19,8 @@ namespace LuteceEngine
 		void CleanUpRoot();
 		void RenderRoot(std::vector<RenderBuffer>& renderBuffer) const;
 		void ShutDownRoot();
+
+		PhysicsScene* GetPhysicsScene() { return m_pPhysics; }
 
 		virtual ~Scene();
 		Scene(const Scene& other) = delete;
@@ -38,6 +41,7 @@ namespace LuteceEngine
 	private:
 		std::string m_Name;
 		std::vector<GameObject*> m_pGos{};
+		PhysicsScene* m_pPhysics;
 
 		bool m_IsInitialized;
 	};

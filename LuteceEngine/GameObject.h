@@ -12,7 +12,6 @@ namespace LuteceEngine
 	{
 	public:
 		GameObject();
-		~GameObject();
 
 		void Initialize(Scene* pScene);
 		void Update();
@@ -22,10 +21,11 @@ namespace LuteceEngine
 		Transform* GetTransform() const { return m_pTransform; }
 		Scene* GetScene() const { return m_pScene; }
 
-		bool IsEnabled() const { return m_IsEnabled; }
+		bool IsEnabled() const;
 		void SetEnabled(const bool enabled);
 
 		bool IsDestroyed() const { return m_IsDestroyed; }
+		void DestroyImmediate() { delete m_pTransform; };
 
 		void AddComponent(Component* pComponent);
 		void RemoveComponent(Component* pComponent, const bool deleteComponent = true);
@@ -41,6 +41,10 @@ namespace LuteceEngine
 		void CleanUp();
 
 	private:
+		friend class Transform;
+		~GameObject();
+
+	private:
 		void OnDestroy();
 		void OnEnable();
 		void OnDisable();
@@ -48,7 +52,6 @@ namespace LuteceEngine
 		Transform* m_pTransform;
 		Scene* m_pScene;
 		std::vector<Component*> m_pComponents;
-		std::vector<GameObject*> m_pChildren;
 		bool m_IsInitialized = false;
 		bool m_IsDestroyed = false;
 		bool m_IsEnabled = true;

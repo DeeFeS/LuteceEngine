@@ -1,6 +1,7 @@
 #include "GameEnginePCH.h"
 #include "Scene.h"
 #include "GameObject.h"
+#include "PhysicsScene.h"
 
 using namespace LuteceEngine;
 
@@ -9,9 +10,13 @@ using namespace LuteceEngine;
 Scene::Scene(const std::string& name)
 	: m_Name(name)
 	, m_IsInitialized(false)
+	, m_pPhysics{nullptr}
 {}
 
-Scene::~Scene() = default;
+Scene::~Scene()
+{
+	SafeDelete(m_pPhysics);
+}
 
 void LuteceEngine::Scene::Add(GameObject * pObject)
 {
@@ -44,6 +49,8 @@ void LuteceEngine::Scene::InitializeRoot()
 	if (m_IsInitialized)
 		return;
 
+	m_pPhysics = new PhysicsScene{ this };
+
 	Service<SceneManager>::Get()->AddScene(this);
 
 	Initialize();
@@ -66,6 +73,8 @@ void LuteceEngine::Scene::FixedUpdateRoot()
 	SceneFixedUpdate();
 	for (size_t i = 0; i < m_pGos.size(); i++)
 		m_pGos[i]->FixedUpdate();
+
+	m_pPhysics->Update();
 }
 
 void Scene::RenderRoot(std::vector<RenderBuffer>& renderBuffer) const
@@ -79,7 +88,7 @@ void LuteceEngine::Scene::ShutDownRoot()
 {
 	ShutDown();
 	for (size_t i = 0; i < m_pGos.size(); i++)
-		delete m_pGos[i];
+		m_pGos[i]->DestroyImmediate();
 	m_pGos.clear();
 }
 
@@ -94,7 +103,7 @@ void LuteceEngine::Scene::CleanUpRoot()
 			continue;
 		}
 
-		delete m_pGos[i];
+		m_pGos[i]->DestroyImmediate();
 		m_pGos[i] = m_pGos.back();
 		m_pGos.pop_back();
 	}

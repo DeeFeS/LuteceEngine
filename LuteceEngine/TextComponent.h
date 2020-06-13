@@ -16,7 +16,7 @@ namespace LuteceEngine
 
 		void SetText(const std::string& text);
 		void SetColor(SDL_Color& color);
-		void SetPosition(float x, float y);
+		void SetOffset(const glm::vec2& offset) { m_Offset = offset; };
 
 		explicit TextComponent(const std::string& text, Font* font, SDL_Color color = { 255, 255, 255 });
 		virtual ~TextComponent();
@@ -30,5 +30,6 @@ namespace LuteceEngine
 		Font* m_pFont;
 		Texture2D* m_pTexture;
 		SDL_Color m_Color;
+		glm::vec2 m_Offset;
 	};
 }

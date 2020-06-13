@@ -20,9 +20,6 @@
     <ClCompile Include="AssetDatabase.cpp">
       <Filter>Singletons</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>GameObjects</Filter>
-    </ClCompile>
     <ClCompile Include="TestScene.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
@@ -67,6 +64,21 @@
     <ClCompile Include="FiniteStateMachine.cpp">
       <Filter>FiniteStateMachine</Filter>
     </ClCompile>
+    <ClCompile Include="Physics.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsScene.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="ColliderComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsShape.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ResourceManager.h">
@@ -91,9 +103,6 @@
     <ClInclude Include="ScriptableObject.h" />
     <ClInclude Include="AssetDatabase.h">
       <Filter>Singletons</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="TestScene.h">
       <Filter>Scenes</Filter>
@@ -146,6 +155,21 @@
       <Filter>FiniteStateMachine</Filter>
     </ClInclude>
     <ClInclude Include="EventSystem.h" />
+    <ClInclude Include="PhysicsScene.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="ColliderComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsShape.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Input">
@@ -160,9 +184,6 @@
     <Filter Include="Core">
       <UniqueIdentifier>{68d337bd-90f8-4edf-a18a-b609f92b6eb2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameObjects">
-      <UniqueIdentifier>{0e8bb8f9-9bd1-49bd-b8b7-b094f3a9cca3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Scenes">
       <UniqueIdentifier>{d553c4d0-6c0a-4f1d-b7f0-1b9914764f4c}</UniqueIdentifier>
     </Filter>
@@ -171,6 +192,9 @@
     </Filter>
     <Filter Include="FiniteStateMachine">
       <UniqueIdentifier>{f5d2659c-5826-4593-948d-f9ca20a96cce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics">
+      <UniqueIdentifier>{e809cd93-254e-428c-a12c-d7f7d90c185f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
