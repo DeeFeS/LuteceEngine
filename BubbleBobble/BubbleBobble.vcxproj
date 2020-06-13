@@ -161,9 +161,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BubbleBobble.cpp" />
+    <ClCompile Include="ItemComponent.cpp" />
+    <ClCompile Include="JumpingState.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="LevelScene.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MovingState.cpp" />
+    <ClCompile Include="PlayerCharacterComponent.cpp" />
     <ClCompile Include="ScoreComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -174,8 +178,12 @@
   <ItemGroup>
     <ClInclude Include="BubbleBobble.h" />
     <ClInclude Include="GameComponentTypes.h" />
+    <ClInclude Include="ItemComponent.h" />
+    <ClInclude Include="JumpingState.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="LevelScene.h" />
+    <ClInclude Include="MovingState.h" />
+    <ClInclude Include="PlayerCharacterComponent.h" />
     <ClInclude Include="ScoreComponent.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

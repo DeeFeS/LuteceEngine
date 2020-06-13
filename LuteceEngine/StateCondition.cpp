@@ -1,6 +1,8 @@
 #include "GameEnginePCH.h"
 #include "StateCondition.h"
 
+using namespace LuteceEngine;
+
 void StateConditionCollection::AddCondition(StateCondition* pCondition)
 {
 	auto it = std::find(m_pConditions.cbegin(), m_pConditions.cend(), pCondition);

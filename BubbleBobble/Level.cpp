@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include "Components.h"
+#include "BubbleBobble.h"
 
 using namespace LuteceEngine;
 
@@ -11,6 +12,7 @@ Level::Level(const int id)
 	: m_Id{ id }
 	, m_pLevel{ nullptr }
 	, m_pEnemies{ nullptr }
+	, m_TileSize{BubbleBobble::GetTileSize()}
 {
 }
 
@@ -57,7 +59,7 @@ void Level::LoadLevelFromFile()
 			{
 				ImageComponent* pImage = new ImageComponent{};
 				pImage->SetTexture(tilesPath);
-				pImage->SetSource(m_Id % 10, m_Id / 10, m_TileSize, m_TileSize);
+				pImage->SetSource(m_Id % 10, m_Id / 10, (int)m_TileSize, (int)m_TileSize);
 				pImage->SetOffset({ m_TileSize * i, m_TileSize * lineCounter });
 				m_pLevel->AddComponent(pImage);
 				continue;

@@ -10,6 +10,9 @@
     <Filter Include="Core">
       <UniqueIdentifier>{75c8f562-d715-4a04-918e-98470caa361a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Player States">
+      <UniqueIdentifier>{537f6837-f565-498d-83ba-ef9203fc58fe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ScoreComponent.cpp">
@@ -27,6 +30,16 @@
     <ClCompile Include="BubbleBobble.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerCharacterComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="MovingState.cpp">
+      <Filter>Player States</Filter>
+    </ClCompile>
+    <ClCompile Include="JumpingState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ScoreComponent.h">
@@ -44,5 +57,15 @@
     <ClInclude Include="GameComponentTypes.h">
       <Filter>Components</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerCharacterComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="MovingState.h">
+      <Filter>Player States</Filter>
+    </ClInclude>
+    <ClInclude Include="JumpingState.h" />
   </ItemGroup>
 </Project>

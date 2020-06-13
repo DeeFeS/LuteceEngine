@@ -163,7 +163,7 @@ void LuteceEngine::GameObject::RemoveComponent(Component* pComponent, const bool
 #endif
 
 			if (deleteComponent)
-				m_pComponents[i]->SetDestroyed();
+				m_pComponents[i]->Destroy();
 			else
 			{
 				m_pComponents[i]->SetGameObject(nullptr);

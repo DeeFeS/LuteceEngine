@@ -18,16 +18,16 @@ namespace LuteceEngine
 		static void ConstUnsubscribe(void* pListener);
 
 	private:
-		static std::vector<void*> m_pListerners;
+		static std::vector<void*> m_pListeners;
 		static std::vector<std::function<void(TEvent&)>> m_pCallbacks;
-		static std::vector<void*> m_pConstListerners;
+		static std::vector<void*> m_pConstListeners;
 		static std::vector<std::function<void(const TEvent&)>> m_pConstCallbacks;
 	};
 
 	template <typename TEvent>
-	std::vector<void*> EventSystem<TEvent>::m_pListerners = {};
+	std::vector<void*> EventSystem<TEvent>::m_pListeners = {};
 	template <typename TEvent>
-	std::vector<void*> EventSystem<TEvent>::m_pConstListerners = {};
+	std::vector<void*> EventSystem<TEvent>::m_pConstListeners = {};
 
 	template <typename TEvent>
 	void EventSystem<TEvent>::Invoke(TEvent& eventData)
@@ -40,11 +40,11 @@ namespace LuteceEngine
 	void EventSystem<TEvent>::Subscribe(void* pListener, std::function<void(TEvent&)> pCallback)
 	{
 #ifdef _DEBUG
-		auto it = std::find(m_pListerners.cbegin(), m_pListerners.cend(), pListener);
-		if (it != m_pListerners.cend())
+		auto it = std::find(m_pListeners.cbegin(), m_pListeners.cend(), pListener);
+		if (it != m_pListeners.cend())
 			Logger::LogWarning(L"EventSystem::Subscribe >> Added listener again.");
 #endif
-		m_pListerners.push_back(pListener);
+		m_pListeners.push_back(pListener);
 		m_pCallbacks.push_back(pCallback);
 	};
 
@@ -52,15 +52,15 @@ namespace LuteceEngine
 	void EventSystem<TEvent>::Unsubscribe(void* pListener)
 	{
 #ifdef _DEBUG
-		auto it = std::find(m_pListerners.cbegin(), m_pListerners.cend(), pListener);
-		if (it == m_pListerners.cend())
+		auto it = std::find(m_pListeners.cbegin(), m_pListeners.cend(), pListener);
+		if (it == m_pListeners.cend())
 		{
 			Logger::LogError(L"EventSystem::Unsubscribe >> Tried to remove not-subscribed listner.");
 			return;
 		}
 #endif
-		size_t idx = it - m_pListerners.cbegin();
-		m_pListerners.erase(it);
+		size_t idx = it - m_pListeners.cbegin();
+		m_pListeners.erase(it);
 		m_pCallbacks.erase(m_pCallbacks.cbegin() + idx);
 	}
 
@@ -75,11 +75,11 @@ namespace LuteceEngine
 	void EventSystem<TEvent>::ConstSubscribe(void* pListener, std::function<void(const TEvent&)> pCallback)
 	{
 #ifdef _DEBUG
-		auto it = std::find(m_pConstListerners.cbegin(), m_pConstListerners.cend(), pListener);
-		if (it != m_pConstListerners.cend())
+		auto it = std::find(m_pConstListeners.cbegin(), m_pConstListeners.cend(), pListener);
+		if (it != m_pConstListeners.cend())
 			Logger::LogWarning(L"EventSystem::ConstSubscribe >> Added listener again.");
 #endif
-		m_pConstListerners.push_back(pListener);
+		m_pConstListeners.push_back(pListener);
 		m_pConstCallbacks.push_back(pCallback);
 	}
 
@@ -87,15 +87,15 @@ namespace LuteceEngine
 	void EventSystem<TEvent>::ConstUnsubscribe(void* pListener)
 	{
 #ifdef _DEBUG
-		auto it = std::find(m_pConstListerners.cbegin(), m_pConstListerners.cend(), pListener);
-		if (it == m_pConstListerners.cend())
+		auto it = std::find(m_pConstListeners.cbegin(), m_pConstListeners.cend(), pListener);
+		if (it == m_pConstListeners.cend())
 		{
 			Logger::LogError(L"EventSystem::ConstUnsubscribe >> Tried to remove not-subscribed listener.");
 			return;
 		}
 #endif
-		size_t idx = it - m_pConstListerners.cbegin();
-		m_pConstListerners.erase(it);
+		size_t idx = it - m_pConstListeners.cbegin();
+		m_pConstListeners.erase(it);
 		m_pConstCallbacks.erase(m_pConstCallbacks.cbegin() + idx);
 	}
 }

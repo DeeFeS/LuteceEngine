@@ -58,9 +58,6 @@
     <ClCompile Include="StateCondition.cpp">
       <Filter>FiniteStateMachine</Filter>
     </ClCompile>
-    <ClCompile Include="State.cpp">
-      <Filter>FiniteStateMachine</Filter>
-    </ClCompile>
     <ClCompile Include="FiniteStateMachine.cpp">
       <Filter>FiniteStateMachine</Filter>
     </ClCompile>

@@ -12,7 +12,7 @@ public:
 	GameObject* GetEnemyObject() { return m_pEnemies; }
 private:
 	const int m_Id;
-	const int m_TileSize = 16;
+	const float m_TileSize;
 	GameObject* m_pLevel;
 	GameObject* m_pEnemies;
 	void LoadLevelFromFile();

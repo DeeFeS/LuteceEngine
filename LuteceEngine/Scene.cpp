@@ -44,7 +44,9 @@ void LuteceEngine::Scene::Add(GameObject* pObject)
 #endif
 
 	m_pGos.push_back(pObject);
-	pObject->Initialize(this);
+
+	if (m_IsInitialized)
+		pObject->Initialize(this);
 }
 
 void LuteceEngine::Scene::InitializeRoot()

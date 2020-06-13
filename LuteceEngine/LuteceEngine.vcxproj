@@ -264,7 +264,6 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="ScriptableObject.cpp" />
     <ClCompile Include="Service.cpp" />
-    <ClCompile Include="State.cpp" />
     <ClCompile Include="StateCondition.cpp" />
     <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="TextComponent.cpp" />

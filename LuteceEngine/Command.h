@@ -27,6 +27,7 @@ namespace LuteceEngine
 		};
 
 		void SetCallback(std::function<TReturn(Args...)> pCallback) { m_pCallback = pCallback; };
+		void RemoveCallback() { m_pCallback = {}; };
 	private:
 		std::function<TReturn(Args...)> m_pCallback;
 	};
@@ -41,29 +42,33 @@ namespace LuteceEngine
 				m_pCallbacks[i](args...);
 		}
 
-		void AddCallback(std::function<void(Args...)> pCallback)
+		void AddCallback(void* pListener, std::function<void(Args...)> pCallback)
 		{
 #ifdef _DEBUG
-			auto it = std::find(m_pCallbacks.cbegin(), m_pCallbacks.cend(), pCallback);
-			if (it != m_pCallbacks.cend())
-				Logger::LogWarning(L"CallbackVectorCommand::Add >> Added callback again.");
+			auto it = std::find(m_pListeners.cbegin(), m_pListeners.cend(), pListener);
+			if (it != m_pListeners.cend())
+				Logger::LogWarning(L"CallbackVectorCommand::Add >> Added listener again.");
 #endif
-			m_pCallbacks->push_back(pCallback);
+			m_pListeners.push_back(pListener);
+			m_pCallbacks.push_back(pCallback);
 		};
 
-		void RemoveCallback(std::function<void(Args...)> pCallback)
+		void RemoveCallback(void* pListener)
 		{
 #ifdef _DEBUG
-			auto it = std::find(m_pCallbacks.cbegin(), m_pCallbacks.cend(), pCallback);
-			if (it == m_pCallbacks.cend())
+			auto it = std::find(m_pListeners.cbegin(), m_pListeners.cend(), pListener);
+			if (it == m_pListeners.cend())
 			{
-				Logger::LogError(L"CallbackVectorCommand::Remove >> Tried to remove non-existent callback.");
+				Logger::LogError(L"CallbackVectorCommand::Remove >> Tried to remove non-existent listener.");
 				return;
 			}
 #endif
-			m_pCallbacks->push_back(pCallback);
+			size_t idx = it - m_pListeners.cbegin();
+			m_pListeners.erase(it);
+			m_pCallbacks.erase(m_pCallbacks.cbegin() + idx);
 		}
 	private:
+		std::vector<void*> m_pListeners;
 		std::vector<std::function<void(Args...)>> m_pCallbacks;
 	};
 }

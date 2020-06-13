@@ -11,8 +11,7 @@ ImageComponent::ImageComponent()
 	, m_pTexture{nullptr}
 	, m_Offset{}
 	, m_Source{}
-{
-}
+{}
 
 void ImageComponent::Render(std::vector<RenderBuffer>& renderBuffer) const
 {

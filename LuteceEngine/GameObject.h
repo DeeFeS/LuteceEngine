@@ -24,6 +24,7 @@ namespace LuteceEngine
 		bool IsEnabled() const;
 		void SetEnabled(const bool enabled);
 
+		void Destroy() { m_IsDestroyed = true; };
 		bool IsDestroyed() const { return m_IsDestroyed; }
 		void DestroyImmediate() { delete m_pTransform; };
 
@@ -31,6 +32,9 @@ namespace LuteceEngine
 		void RemoveComponent(Component* pComponent, const bool deleteComponent = true);
 		bool IsComponentAttached(Component* pComponent);
 		
+		template<typename T>
+		std::vector<T*> GetComponents(const int typeId);
+
 		GameObject(const GameObject& other) = delete;
 		GameObject(GameObject&& other) = delete;
 		GameObject& operator=(const GameObject& other) = delete;
@@ -56,4 +60,16 @@ namespace LuteceEngine
 		bool m_IsDestroyed = false;
 		bool m_IsEnabled = true;
 	};
+
+	template<typename T>
+	inline std::vector<T*> GameObject::GetComponents(const int typeId)
+	{
+		std::vector<T*> pRet{};
+		for (size_t i = 0; i < m_pComponents.size(); i++)
+		{
+			if (m_pComponents[i]->GetType() == typeId)
+				pRet.push_back(static_cast<T*>(m_pComponents[i]));
+		}
+		return pRet;
+	}
 }

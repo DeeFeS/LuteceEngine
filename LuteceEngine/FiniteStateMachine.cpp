@@ -1,8 +1,9 @@
 #include "GameEnginePCH.h"
 #include "FiniteStateMachine.h"
+using namespace LuteceEngine;
 
 FiniteStateMachine::FiniteStateMachine(State* pStartState, std::vector<StateConnection>& pStartConnections)
-	: m_pCurrentState{pStartState, pStartConnections}
+	: m_pCurrentState{pStartState, std::move(pStartConnections)}
 	, m_pStates{}
 {
 	m_pStates.insert(m_pCurrentState);
@@ -37,6 +38,20 @@ void FiniteStateMachine::Update()
 			}
 		}
 	}
+}
+
+void LuteceEngine::FiniteStateMachine::AddState(State* pState, std::vector<StateConnection>& pConnections)
+{
+#ifdef _DEBUG
+	auto it = m_pStates.find(pState);
+	if (it != m_pStates.cend())
+	{
+		Logger::LogError(L"FiniteStateMachine::AddState >> Added state again.");
+		return;
+	}
+#endif
+	std::pair<State*, std::vector<StateConnection>> pair{ pState, pConnections };
+	m_pStates.insert(pair);
 }
 
 void FiniteStateMachine::ChangeState(std::pair<State*, std::vector<StateConnection>> pNewState)

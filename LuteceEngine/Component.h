@@ -21,6 +21,7 @@ namespace LuteceEngine
 		bool IsActive() const { return m_IsActive; }
 		void SetActive(const bool active) { m_IsActive = active; }
 
+		void Destroy() { m_IsDestroyed = true; };
 		bool IsDestroyed() const { return m_IsDestroyed; }
 
 		Component(const Component& other) = delete;
@@ -41,7 +42,6 @@ namespace LuteceEngine
 	private:
 		friend class GameObject;
 		void SetGameObject(GameObject* pGameObject);
-		void SetDestroyed() { m_IsDestroyed = true; };
 		void RootDestroy();
 
 		bool m_IsActive = true;

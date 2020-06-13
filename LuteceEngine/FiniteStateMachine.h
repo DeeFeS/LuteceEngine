@@ -4,28 +4,33 @@
 #include <map>
 #include <vector>
 
-struct StateConnection
+namespace LuteceEngine
 {
-	std::vector<StateCondition*> pConiditions;
-	State* pState;
-};
+	struct StateConnection
+	{
+		std::vector<StateCondition*> pConiditions;
+		State* pState;
+	};
 
-class FiniteStateMachine
-{
-public:
-	FiniteStateMachine(State* pStartState, std::vector<StateConnection>& pStartConnections);
-	~FiniteStateMachine();
-	
-	void Update();
+	class FiniteStateMachine
+	{
+	public:
+		FiniteStateMachine(State* pStartState, std::vector<StateConnection>& pStartConnections);
+		~FiniteStateMachine();
 
-private:
-	std::pair<State*, std::vector<StateConnection>> m_pCurrentState;
-	std::map<State*, std::vector<StateConnection>> m_pStates;
-	void ChangeState(std::pair<State*, std::vector<StateConnection>> pNewState);
+		void Update();
+		void AddState(State* pState, std::vector<StateConnection>& pConnections);
 
-	FiniteStateMachine(const FiniteStateMachine& other) = delete;
-	FiniteStateMachine(FiniteStateMachine&& other) = delete;
-	FiniteStateMachine& operator=(const FiniteStateMachine& other) = delete;
-	FiniteStateMachine& operator=(FiniteStateMachine&& other) = delete;
-};
+	private:
+		std::pair<State*, std::vector<StateConnection>> m_pCurrentState;
+		std::map<State*, std::vector<StateConnection>> m_pStates;
+		void ChangeState(std::pair<State*, std::vector<StateConnection>> pNewState);
 
+		FiniteStateMachine(const FiniteStateMachine& other) = delete;
+		FiniteStateMachine(FiniteStateMachine&& other) = delete;
+		FiniteStateMachine& operator=(const FiniteStateMachine& other) = delete;
+		FiniteStateMachine& operator=(FiniteStateMachine&& other) = delete;
+	};
+
+
+}

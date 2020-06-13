@@ -1,7 +1,9 @@
 #pragma once
 #include "EngineComponentTypes.h"
 
-enum class eGameComponentTypes : int
+enum class eGameComponentType : int
 {
-	Score = int(eEngineComponentType::_End),
+	Player = int(eEngineComponentType::_End),
+	Score,
+	Item,
 };

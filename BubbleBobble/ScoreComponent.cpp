@@ -7,11 +7,11 @@ using namespace LuteceEngine;
 
 std::vector<std::function<void(Event_PointsScored&)>> EventSystem<Event_PointsScored>::m_pCallbacks = {};
 std::vector<std::function<void(const Event_PointsScored&)>> EventSystem<Event_PointsScored>::m_pConstCallbacks = {};
-std::vector<void*> EventSystem<Event_PointsScored>::m_pListerners = {};
-std::vector<void*> EventSystem<Event_PointsScored>::m_pConstListerners = {};
+std::vector<void*> EventSystem<Event_PointsScored>::m_pListeners = {};
+std::vector<void*> EventSystem<Event_PointsScored>::m_pConstListeners = {};
 
 ScoreComponent::ScoreComponent(const int playerId)
-	: Component((int)eGameComponentTypes::Score)
+	: Component((int)eGameComponentType::Score)
 	, m_CurrentScore{0}
 	, m_pText{nullptr}
 	, m_PlayerId{playerId}

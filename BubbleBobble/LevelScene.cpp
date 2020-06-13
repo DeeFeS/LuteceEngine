@@ -4,12 +4,15 @@
 #include "InputManager.h"
 #include "GameEngine.h"
 #include <SDL.h>
+#include "BubbleBobble.h"
+#include "PlayerCharacterComponent.h"
 
 using namespace LuteceEngine;
 
 LevelScene::LevelScene()
 	: Scene{ "LevelScene" }
 	, m_pCamera{ nullptr }
+	, m_TileSize{(int)BubbleBobble::GetTileSize()}
 {}
 
 LevelScene::~LevelScene()
@@ -23,8 +26,11 @@ LevelScene::~LevelScene()
 void LevelScene::Initialize()
 {
 	auto pGo = new GameObject{};
-	pGo->AddComponent(new ScoreComponent{ -1 });
+	auto pPlayer = new PlayerCharacterComponent(0, eControllerIdx::Controller1);
+	pGo->AddComponent(pPlayer);
 	Add(pGo);
+
+	//pGo->AddComponent(new ScoreComponent{ -1 });
 
 	m_pCamera = new GameObject{};
 	auto pCamera = new CameraComponent{};
@@ -32,7 +38,7 @@ void LevelScene::Initialize()
 	SetActiveCamera(pCamera);
 	Add(m_pCamera);
 
-	auto pInput = Service<InputManager>::Get();
+	//auto pInput = Service<InputManager>::Get();
 	//auto pButton = new ButtonCommand(eControllerIdx::Keyboard, VK_LBUTTON, eControllerButton::None, eInputState::Pressed);
 	//pButton->SetCallback([]() -> bool { Logger::LogInfo(L"Keyboard PRESSED Left Mouse"); return false; });
 	//pInput->AddCommand(pButton);
@@ -45,7 +51,7 @@ void LevelScene::Initialize()
 	//pButton->SetCallback([]() -> bool { Logger::LogInfo(L"Controller 1 RELEASED Start"); return false; });
 	//pInput->AddCommand(pButton);
 
-	auto pAxis = new AxisCommand(eControllerIdx::Controller1, 'W', 'S', eControllerAxis::LeftThumbY);
+	/*auto pAxis = new AxisCommand(eControllerIdx::Controller1, 'W', 'S', eControllerAxis::LeftThumbY);
 	pAxis->SetCallback([this](float value) -> bool { m_pCamera->GetTransform()->Scale(value, value); return false; });
 	pInput->AddCommand(pAxis);
 
@@ -55,7 +61,7 @@ void LevelScene::Initialize()
 
 	pAxis = new AxisCommand(eControllerIdx::Controller1, 0, 0, eControllerAxis::RightThumbX);
 	pAxis->SetCallback([this](float value) -> bool { m_pCamera->GetTransform()->Move(value * 10.f, 0.f); return false; });
-	pInput->AddCommand(pAxis);
+	pInput->AddCommand(pAxis);*/
 
 	m_pLevel.push_back(new Level(0));
 	m_pLevel[0]->Initialize();

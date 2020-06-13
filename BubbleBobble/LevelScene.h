@@ -24,7 +24,7 @@ private:
 	std::vector<Level*> m_pLevel;
 	const int m_LevelWidth{ 32 };
 	const int m_LevelHeight{ 24 };
-	const int m_TileSize{ 16 };
+	const int m_TileSize;
 	GameObject* m_pCamera;
 
 	LevelScene(const LevelScene& other) = delete;
