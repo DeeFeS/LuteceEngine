@@ -5,16 +5,18 @@
 #include <sstream>
 #include "Components.h"
 #include "BubbleBobble.h"
+#include "MaitaComponent.h"
+#include "ZenChanComponent.h"
+#include "EnemyComponent.h"
 
 using namespace LuteceEngine;
 
 Level::Level(const int id)
 	: m_Id{ id }
 	, m_pLevel{ nullptr }
-	, m_pEnemies{ nullptr }
-	, m_TileSize{BubbleBobble::GetTileSize()}
-{
-}
+	, m_pEnemies{ }
+	, m_TileSize{ BubbleBobble::GetTileSize() }
+{}
 
 void Level::Initialize()
 {
@@ -31,8 +33,10 @@ void Level::LoadLevelFromFile()
 	ss << path << "Level_" << m_Id << ".txt";
 
 	std::ifstream ifs(ss.str(), std::ifstream::in);
-	ss.str("");
+	if (ifs.fail())
+		return;
 
+	ss.str("");
 	ss << path << "Tiles.png";
 
 	std::string tilesPath{ ss.str() };
@@ -62,6 +66,32 @@ void Level::LoadLevelFromFile()
 				pImage->SetSource(m_Id % 10 * (int)m_TileSize, m_Id / 10 * (int)m_TileSize, (int)m_TileSize, (int)m_TileSize);
 				pImage->SetOffset({ m_TileSize * i, m_TileSize * lineCounter });
 				m_pLevel->AddComponent(pImage);
+				continue;
+			}
+			if (buffer[i] == 'Z')
+			{
+				auto pGo = new GameObject{};
+				auto pZen = new ZenChanComponent();
+				pGo->AddComponent(pZen);
+				auto pEnemy = new EnemyComponent{ eEnemy::ZenChan };
+				pGo->AddComponent(pEnemy);
+				m_pEnemies.push_back(pEnemy);
+				pZen->SetStartPos({ m_TileSize * i, m_TileSize * lineCounter });
+				Logger::LogFormat(eLogLevel::Info, L"Zen(%i) x: %7.2f | y: %7.2f", i, pZen->GetStartPosition().x, pZen->GetStartPosition().y);
+				//pGo->GetTransform()->SetPosition({ m_TileSize * i, m_TileSize * lineCounter });
+				continue;
+			}
+			if (buffer[i] == 'M')
+			{
+				auto pGo = new GameObject{};
+				auto pMaita = new MaitaComponent(eControllerIdx::None);
+				pGo->AddComponent(pMaita);
+				auto pEnemy = new EnemyComponent{ eEnemy::Maita };
+				pGo->AddComponent(pEnemy);
+				m_pEnemies.push_back(pEnemy);
+				pMaita->SetStartPos({ m_TileSize * i, m_TileSize * lineCounter });
+				Logger::LogFormat(eLogLevel::Info, L"Maita(%i) x: %7.2f | y: %7.2f", i, pMaita->GetStartPosition().x, pMaita->GetStartPosition().y);
+				//pGo->GetTransform()->SetPosition({ m_TileSize * i, m_TileSize * lineCounter });
 				continue;
 			}
 		}

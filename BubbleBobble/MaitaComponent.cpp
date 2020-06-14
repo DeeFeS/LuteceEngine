@@ -20,7 +20,7 @@ MaitaComponent::MaitaComponent(const eControllerIdx controller)
 	, m_Shoot{ false }
 	, m_ShootCooldown{ 1.f }
 	, m_StartPos{}
-	, m_CurrentState{ eState::Normal }
+	, m_CurrentState{ eEnemyState::Normal }
 	, m_Timer{ 0.f }
 {}
 
@@ -59,13 +59,13 @@ void MaitaComponent::PreInitialize()
 			if (pPlayer.empty())
 				return;
 
-			if (m_CurrentState == eState::Caught)
+			if (m_CurrentState == eEnemyState::Caught)
 			{
-				SetState(eState::Popped);
+				SetState(eEnemyState::Popped);
 				Event_PointsScored e{ m_Worth, pPlayer[0]->GetId() };
 				EventSystem<Event_PointsScored>::ConstInvoke(e);
 			}
-			if (m_CurrentState == eState::Normal)
+			if (m_CurrentState == eEnemyState::Normal)
 			{
 				pPlayer[0]->Damage();
 				if (m_Controller != eControllerIdx::None)
@@ -75,14 +75,14 @@ void MaitaComponent::PreInitialize()
 				}
 			}
 
-
-
+			contact.pCollider->GetGameObject()->Destroy();
 		});
 }
 
 void MaitaComponent::Initialize()
 {
 	InitializeInput();
+	GetGameObject()->GetTransform()->SetPosition(m_StartPos);
 }
 
 void MaitaComponent::Update()
@@ -92,29 +92,29 @@ void MaitaComponent::Update()
 	{
 		switch (m_CurrentState)
 		{
-		case MaitaComponent::eState::Caught:
-			SetState(eState::Normal);
+		case eEnemyState::Caught:
+			SetState(eEnemyState::Normal);
 			break;
-		case MaitaComponent::eState::Popped:
+		case eEnemyState::Popped:
 			if (m_Controller == eControllerIdx::None)
 			{
 				GetGameObject()->Destroy();
 				return;
 			}
-			SetState(eState::Normal);
+			SetState(eEnemyState::Normal);
 			GetTransform()->SetPosition(m_StartPos);
 			break;
 		}
 	}
 	HandleMove();
-	if (m_CurrentState == eState::Normal)
+	if (m_CurrentState == eEnemyState::Normal)
 	{
 		HandleDirection();
 		HandleShoot();
 	}
 }
 
-void MaitaComponent::SetState(const eState state)
+void MaitaComponent::SetState(const eEnemyState state)
 {
 	if (m_CurrentState == state)
 		return;
@@ -122,14 +122,14 @@ void MaitaComponent::SetState(const eState state)
 	m_CurrentState = state;
 	switch (state)
 	{
-	case MaitaComponent::eState::Normal:
+	case eEnemyState::Normal:
 		m_pSprite->SetSprite(m_Sprites[eSprite::Left]);
 		break;
-	case MaitaComponent::eState::Caught:
+	case eEnemyState::Caught:
 		m_pSprite->SetSprite(m_Sprites[eSprite::Caught]);
 		m_Timer = m_CaughtTime;
 		break;
-	case MaitaComponent::eState::Popped:
+	case eEnemyState::Popped:
 		m_pSprite->SetSprite(m_Sprites[eSprite::Popped]);
 		m_Timer = m_RespawnTime;
 		break;

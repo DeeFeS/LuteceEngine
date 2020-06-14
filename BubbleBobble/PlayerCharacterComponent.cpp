@@ -13,6 +13,7 @@
 #include "ProjectileComponent.h"
 #include "EnemyComponent.h"
 #include "MaitaComponent.h"
+#include "ZenChanComponent.h"
 
 using namespace LuteceEngine;
 
@@ -154,9 +155,9 @@ void PlayerCharacterComponent::InitializeInput()
 void PlayerCharacterComponent::InitializeFSM()
 {
 	m_pSpawn = new SpawnState({ 100, 480 }, GetTransform(), 250.f);
-	auto pJumping = new JumpingState(175.f, &m_InputX, m_pCollider);
-	auto pMoving = new MovingState(&m_InputX, m_pCollider);
-	auto pFalling = new FallingState(&m_InputX, m_pCollider);
+	auto pJumping = new JumpingState(175.f, &m_InputX, m_pCollider, 75.f);
+	auto pMoving = new MovingState(&m_InputX, m_pCollider, 75.f);
+	auto pFalling = new FallingState(&m_InputX, m_pCollider, 75.f);
 
 	std::vector<StateConnection> v{}; // Spawning Connections
 	v.push_back({ {new BoolPointerCondition(m_pSpawn->GetReachedGoal())}, pFalling });
@@ -205,17 +206,17 @@ void PlayerCharacterComponent::Shoot()
 			if (pEnemies.empty())
 				return;
 
-			// TODO: Catch enemy
 			switch (eEnemy type = pEnemies[0]->GetType())
 			{
 			case eEnemy::Maita:
-				contact.pOther->GetGameObject()->GetComponents<MaitaComponent>((int)eGameComponentType::Maita)[0]->SetState(MaitaComponent::eState::Caught);
+				contact.pOther->GetGameObject()->GetComponents<MaitaComponent>((int)eGameComponentType::Maita)[0]->SetState(eEnemyState::Caught);
 				break;
 			case eEnemy::ZenChan:
-				break;
-			default:
+				contact.pOther->GetGameObject()->GetComponents<ZenChanComponent>((int)eGameComponentType::ZenChan)[0]->SetState(eEnemyState::Caught);
 				break;
 			}
+
+			contact.pCollider->GetGameObject()->Destroy();
 		});
 
 	const float projectileSpeed = 100.f;

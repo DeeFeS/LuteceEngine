@@ -20,9 +20,9 @@ protected:
 	virtual void PostInitialize() override;
 	virtual void SceneUpdate() override;
 	virtual void SceneFixedUpdate() override;
-	virtual void SceneCleanUp() const override;
+	virtual void SceneCleanUp() override;
 	virtual void SceneRender(std::vector<RenderBuffer>& renderBuffer) const override;
-	virtual void ShutDown() const override;
+	virtual void ShutDown() override;
 
 private:
 	TextComponent* m_pFps;

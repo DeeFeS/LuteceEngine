@@ -5,10 +5,11 @@
 #include "GameComponentTypes.h"
 #include "Definitions.h"
 
-MovingState::MovingState(float* pInput, ColliderComponent* pCollider)
+MovingState::MovingState(float* pInput, ColliderComponent* pCollider, const float movementSpeed)
 	: State{}
 	, m_pInput{ pInput }
 	, m_pCollider{ pCollider }
+	, m_Speed{ movementSpeed }
 {}
 
 void MovingState::Enter()
@@ -20,8 +21,7 @@ void MovingState::Enter()
 void MovingState::Update()
 {
 	float dt = Service<Time>::Get()->GetDelta();
-	const float movementSpeed = 50.f;
-	auto dir = *m_pInput * movementSpeed;
+	auto dir = *m_pInput * m_Speed;
 	m_pCollider->GetGameObject()->GetTransform()->Move(dir * dt, GRAVITY * dt);
 }
 

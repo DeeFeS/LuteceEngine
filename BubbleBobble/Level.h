@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "EnemyComponent.h"
 
 using namespace LuteceEngine;
 
@@ -9,12 +10,12 @@ public:
 	Level(const int id);
 	void Initialize();
 	GameObject* GetLevelObject() { return m_pLevel; }
-	GameObject* GetEnemyObject() { return m_pEnemies; }
+	std::vector<EnemyComponent*>& GetEnemies() { return m_pEnemies; }
 private:
 	const int m_Id;
 	const float m_TileSize;
 	GameObject* m_pLevel;
-	GameObject* m_pEnemies;
+	std::vector<EnemyComponent*> m_pEnemies;
 	void LoadLevelFromFile();
 };
 

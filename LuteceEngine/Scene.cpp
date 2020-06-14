@@ -115,7 +115,7 @@ void LuteceEngine::Scene::CleanUpRoot()
 			m_pGos[i]->CleanUp();
 			continue;
 		}
-
+		m_pGos[i]->OnDestroy();
 		m_pGos[i]->DestroyImmediate();
 		m_pGos[i] = m_pGos.back();
 		m_pGos.pop_back();

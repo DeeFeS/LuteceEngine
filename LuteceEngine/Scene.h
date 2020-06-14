@@ -37,9 +37,9 @@ namespace LuteceEngine
 		virtual void PostInitialize() = 0;
 		virtual void SceneUpdate() = 0;
 		virtual void SceneFixedUpdate() = 0;
-		virtual void SceneCleanUp() const = 0;
+		virtual void SceneCleanUp() = 0;
 		virtual void SceneRender(std::vector<RenderBuffer>& renderBuffer) const = 0;
-		virtual void ShutDown() const = 0;
+		virtual void ShutDown() = 0;
 
 	private:
 		std::string m_Name;

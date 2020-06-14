@@ -13,14 +13,22 @@
 #include "ResourceManager.h"
 #include "TextComponent.h"
 #include "MaitaComponent.h"
+#include "ZenChanComponent.h"
 #include "EnemyComponent.h"
+#include "GameComponentTypes.h"
 
 using namespace LuteceEngine;
 
-std::vector<std::function<void(Event_LevelCleared&)>> EventSystem<Event_LevelCleared>::m_pCallbacks = {};
-std::vector<std::function<void(const Event_LevelCleared&)>> EventSystem<Event_LevelCleared>::m_pConstCallbacks = {};
-std::vector<void*> EventSystem<Event_LevelCleared>::m_pListeners = {};
-std::vector<void*> EventSystem<Event_LevelCleared>::m_pConstListeners = {};
+std::vector<std::function<void(Event_AddLevelElement&)>> EventSystem<Event_AddLevelElement>::m_pCallbacks = {};
+std::vector<std::function<void(const Event_AddLevelElement&)>> EventSystem<Event_AddLevelElement>::m_pConstCallbacks = {};
+std::vector<void*> EventSystem<Event_AddLevelElement>::m_pListeners = {};
+std::vector<void*> EventSystem<Event_AddLevelElement>::m_pConstListeners = {};
+
+std::vector<std::function<void(Event_RemoveLevelElement&)>> EventSystem<Event_RemoveLevelElement>::m_pCallbacks = {};
+std::vector<std::function<void(const Event_RemoveLevelElement&)>> EventSystem<Event_RemoveLevelElement>::m_pConstCallbacks = {};
+std::vector<void*> EventSystem<Event_RemoveLevelElement>::m_pListeners = {};
+std::vector<void*> EventSystem<Event_RemoveLevelElement>::m_pConstListeners = {};
+
 
 LevelScene::LevelScene()
 	: Scene{ "LevelScene" }
@@ -43,6 +51,9 @@ LevelScene::~LevelScene()
 
 void LevelScene::Initialize()
 {
+	EventSystem<Event_AddLevelElement>::ConstSubscribe(this, [this](const Event_AddLevelElement&) { m_LevelElements++; });
+	EventSystem<Event_RemoveLevelElement>::ConstSubscribe(this, [this](const Event_RemoveLevelElement&) { m_LevelElements--; });
+
 	/*auto pGo = new GameObject{};
 	CircleShape* pCircle = new CircleShape{};
 	pCircle->radius = 16.f;
@@ -84,7 +95,7 @@ void LevelScene::Initialize()
 	Add(pGo);
 #endif // TWO_PLAYERS
 
-	
+
 
 	pGo = new GameObject{};
 	m_pCamera = new CameraComponent{};
@@ -123,20 +134,41 @@ void LevelScene::Initialize()
 
 	m_pLevel.push_back(new Level(m_CurrentLevel));
 	m_pLevel[0]->Initialize();
-
-	EventSystem<Event_LevelCleared>::ConstSubscribe(this, [this](const Event_LevelCleared& e) {this->OnLevelCleared(e); });
 }
 
 void LevelScene::PostInitialize()
 {
-	auto pGo = m_pLevel[0]->GetLevelObject();
 	auto window = GameEngine::GetWindow();
+	auto pGo = m_pLevel[0]->GetLevelObject();
 	pGo->GetTransform()->SetPosition((window.width - m_LevelWidth * m_TileSize) / 2.f, (window.height - m_LevelHeight * m_TileSize) / 2.f, 1.f);
 	Add(pGo);
+	auto levelPos = pGo->GetTransform()->GetWorldPosition();
+
+	auto pEnemies = m_pLevel[0]->GetEnemies();
+	m_LevelElements = pEnemies.size();
+	for (size_t i = 0; i < pEnemies.size(); i++)
+	{
+		MaitaComponent* pMaita;
+		ZenChanComponent* pZen;
+		switch (pEnemies[i]->GetType())
+		{
+		case eEnemy::Maita:
+			pMaita = pEnemies[i]->GetGameObject()->GetComponents<MaitaComponent>((int)eGameComponentType::Maita)[0];
+			pMaita->SetBounds(&m_Bounds);
+			pMaita->MoveStartPos(levelPos);
+			break;
+		case eEnemy::ZenChan:
+			pZen = pEnemies[i]->GetGameObject()->GetComponents<ZenChanComponent>((int)eGameComponentType::ZenChan)[0];
+			pZen->SetBounds(&m_Bounds);
+			pZen->MoveStartPos(levelPos);
+			break;
+		}
+
+		Add(pEnemies[i]->GetGameObject());
+	}
 
 	m_pText->SetOffset({ window.width / 2.f, m_TileSize * 2.5f });
 
-	auto levelPos = pGo->GetTransform()->GetWorldPosition();
 	m_Bounds.topLeft = levelPos + glm::vec2{ m_TileSize * 2.f, 0.f };
 	m_Bounds.width = float((m_LevelWidth - 4) * m_TileSize);
 	m_Bounds.height = float(m_LevelHeight * m_TileSize);
@@ -164,6 +196,15 @@ void LevelScene::PostInitialize()
 	Add(pGo);
 	pMaita->SetStartPos({ window.width / 2.f, window.height / 2.f });
 	pMaita->GetTransform()->SetPosition(window.width / 2.f, window.height / 2.f, 0.1f);*/
+
+	/*pGo = new GameObject{};
+	auto pZen = new ZenChanComponent();
+	pZen->SetBounds(&m_Bounds);
+	pZen->SetStartPos({ window.width / 2.f, window.height / 2.f });
+	pGo->AddComponent(pZen);
+	pGo->AddComponent(new EnemyComponent{ eEnemy::ZenChan });
+	Add(pGo);
+	pZen->GetTransform()->SetPosition(window.width / 2.f, window.height / 5.f, 0.1f);*/
 }
 
 void LevelScene::SceneUpdate()
@@ -173,13 +214,18 @@ void LevelScene::SceneUpdate()
 
 	Event_PointsScored e2{ 1, 1 };
 	EventSystem<Event_PointsScored>::ConstInvoke(e2);*/
+
+	if (m_LevelElements == 0)
+	{
+		OnLevelCleared();
+	}
 }
 
 void LevelScene::SceneFixedUpdate()
 {
 }
 
-void LevelScene::SceneCleanUp() const
+void LevelScene::SceneCleanUp()
 {
 }
 
@@ -188,14 +234,14 @@ void LevelScene::SceneRender(std::vector<RenderBuffer>& renderBuffer) const
 	UnreferencedParameter(renderBuffer);
 }
 
-void LevelScene::ShutDown() const
+void LevelScene::ShutDown()
 {
+	EventSystem<Event_AddLevelElement>::ConstUnsubscribe(this);
+	EventSystem<Event_RemoveLevelElement>::ConstUnsubscribe(this);
 }
 
-void LevelScene::OnLevelCleared(const Event_LevelCleared& e)
+void LevelScene::OnLevelCleared()
 {
-	UnreferencedParameter(e);
-
 	m_CurrentLevel++;
 	if (m_CurrentLevel >= int(m_pLevel.size()))
 	{
@@ -211,9 +257,35 @@ void LevelScene::OnLevelCleared(const Event_LevelCleared& e)
 		auto window = GameEngine::GetWindow();
 		pGo->GetTransform()->SetPosition(0.f, float(m_CurrentLevel * window.height), 1.f);
 		pGo->GetTransform()->Move((window.width - m_LevelWidth * m_TileSize) / 2.f, (window.height - m_LevelHeight * m_TileSize) / 2.f);
+		Add(pGo);
 
 		auto levelPos = pGo->GetTransform()->GetWorldPosition();
 		m_Bounds.topLeft = levelPos + glm::vec2{ m_TileSize * 2.f, 0.f };
+		m_pPlayer1->SetStartPos({ levelPos.x + 4 * m_TileSize, levelPos.y + (m_LevelHeight - 1.5f) * m_TileSize });
+		m_pCamera->GetTransform()->SetPosition(0.f, float(m_CurrentLevel * window.height));
+
+		auto pEnemies = m_pLevel[m_CurrentLevel]->GetEnemies();
+		m_LevelElements = pEnemies.size();
+		for (size_t i = 0; i < pEnemies.size(); i++)
+		{
+			MaitaComponent* pMaita;
+			ZenChanComponent* pZen;
+			switch (pEnemies[i]->GetType())
+			{
+			case eEnemy::Maita:
+				pMaita = pEnemies[i]->GetGameObject()->GetComponents<MaitaComponent>((int)eGameComponentType::Maita)[0];
+				pMaita->SetBounds(&m_Bounds);
+				pMaita->MoveStartPos(levelPos);
+				break;
+			case eEnemy::ZenChan:
+				pZen = pEnemies[i]->GetGameObject()->GetComponents<ZenChanComponent>((int)eGameComponentType::ZenChan)[0];
+				pZen->SetBounds(&m_Bounds);
+				pZen->MoveStartPos(levelPos);
+				break;
+			}
+
+			Add(pEnemies[i]->GetGameObject());
+		}
 	}
 	if (m_CurrentLevel + 1 < 10)
 	{

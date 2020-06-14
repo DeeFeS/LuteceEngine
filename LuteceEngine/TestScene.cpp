@@ -73,7 +73,7 @@ void TestScene::SceneFixedUpdate()
 {
 }
 
-void TestScene::SceneCleanUp() const
+void TestScene::SceneCleanUp()
 {
 }
 
@@ -82,6 +82,6 @@ void TestScene::SceneRender(std::vector<RenderBuffer>& renderBuffer) const
 	UnreferencedParameter(renderBuffer);
 }
 
-void TestScene::ShutDown() const
+void TestScene::ShutDown()
 {
 }

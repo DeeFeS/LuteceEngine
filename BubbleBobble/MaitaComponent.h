@@ -5,6 +5,7 @@
 #include "LevelScene.h"
 #include "Definitions.h"
 #include "ScoreComponent.h"
+#include "EnemyComponent.h"
 #include <map>
 
 using namespace LuteceEngine;
@@ -12,20 +13,17 @@ using namespace LuteceEngine;
 class MaitaComponent : public Component
 {
 public:
-	enum class eState
-	{
-		Normal, Caught, Popped
-	};
-
 	MaitaComponent(const eControllerIdx controller);
 	void SetBounds(LevelBounds* pBounds);
 	virtual void PreInitialize() override;
 	virtual void Initialize() override;
 	virtual void Update() override;
-	void SetState(const eState state);
-	eState GetState() { return m_CurrentState; }
+	void SetState(const eEnemyState state);
+	eEnemyState GetState() { return m_CurrentState; }
 
 	void SetStartPos(const glm::vec2& pos) { m_StartPos = pos; };
+	void MoveStartPos(const glm::vec2& dir) { m_StartPos += dir; };
+	glm::vec2 GetStartPosition() { return m_StartPos; };
 
 private:
 	enum class eSprite
@@ -51,7 +49,7 @@ private:
 	eDirection m_LastDirection;
 	const float m_ShootCooldownTime = 2.5f;
 	std::map<eSprite, SpriteData> m_Sprites;
-	eState m_CurrentState;
+	eEnemyState m_CurrentState;
 
 	void InitializeSpriteData();
 	void InitializeInput();
