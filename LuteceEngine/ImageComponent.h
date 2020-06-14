@@ -12,6 +12,7 @@ public:
 	void Render(std::vector<RenderBuffer>& renderBuffer) const override;
 	void SetTexture(const std::string& filename);
 	void SetOffset(const glm::vec2& offset) { m_Offset = offset; };
+	void SetDestSize(const float width, float height) { m_DestWidth = width; m_DestHeight = height; };
 	void SetSource(const int x, const int y, const int width, const int height);
 
 	virtual ~ImageComponent() override = default;
@@ -23,6 +24,7 @@ public:
 private:
 	Texture2D* m_pTexture;
 	glm::vec2 m_Offset;
+	float m_DestWidth, m_DestHeight;
 	SDL_Rect m_Source;
 };
 

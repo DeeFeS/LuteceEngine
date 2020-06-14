@@ -19,7 +19,7 @@ namespace LuteceEngine
 	class StateConditionCollection : public StateCondition
 	{
 	public:
-		StateConditionCollection(std::vector<StateCondition*>& pConditions) : m_pConditions{ pConditions } {};
+		StateConditionCollection(std::vector<StateCondition*> pConditions) : m_pConditions{ pConditions } {};
 		virtual ~StateConditionCollection();
 		virtual bool Evaluate() override;
 		void AddCondition(StateCondition* pCondition);
@@ -27,5 +27,16 @@ namespace LuteceEngine
 	private:
 		std::vector<StateCondition*> m_pConditions;
 
+	};
+
+	class BoolPointerCondition : public StateCondition
+	{
+	public:
+		BoolPointerCondition(const bool* pValue, const bool invert = false) : StateCondition(), m_pValue{ pValue }, m_Invert{ invert } {};
+		virtual bool Evaluate() override;
+
+	private:
+		const bool* m_pValue;
+		const bool m_Invert;
 	};
 }

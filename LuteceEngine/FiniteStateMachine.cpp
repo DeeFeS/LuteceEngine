@@ -7,6 +7,7 @@ FiniteStateMachine::FiniteStateMachine(State* pStartState, std::vector<StateConn
 	, m_pStates{}
 {
 	m_pStates.insert(m_pCurrentState);
+	m_pCurrentState.first->Enter();
 }
 
 FiniteStateMachine::~FiniteStateMachine()
@@ -56,6 +57,10 @@ void LuteceEngine::FiniteStateMachine::AddState(State* pState, std::vector<State
 
 void FiniteStateMachine::ChangeState(std::pair<State*, std::vector<StateConnection>> pNewState)
 {
+#ifdef _DEBUG
+	Logger::LogInfo(L"FSM: State Changed");
+#endif // _DEBUG
+
 	m_pCurrentState.first->Exit();
 	m_pCurrentState = pNewState;
 	m_pCurrentState.first->Enter();

@@ -191,7 +191,7 @@ void LuteceEngine::InputManager::Update()
 	for (size_t i = 0; i < m_pAxisCommands.size(); i++)
 	{
 		float value{ GetAxis(m_pAxisCommands[i]) };
-		if (value != 0.f)
+		//if (value != 0.f)
 			m_pAxisCommands[i]->Execute(value);
 	}
 }

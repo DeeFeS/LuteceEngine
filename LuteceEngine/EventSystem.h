@@ -2,6 +2,7 @@
 #include <vector>
 #include <algorithm>
 #include <functional>
+#include "Logger.h"
 
 namespace LuteceEngine
 {
@@ -39,8 +40,8 @@ namespace LuteceEngine
 	template <typename TEvent>
 	void EventSystem<TEvent>::Subscribe(void* pListener, std::function<void(TEvent&)> pCallback)
 	{
-#ifdef _DEBUG
 		auto it = std::find(m_pListeners.cbegin(), m_pListeners.cend(), pListener);
+#ifdef _DEBUG
 		if (it != m_pListeners.cend())
 			Logger::LogWarning(L"EventSystem::Subscribe >> Added listener again.");
 #endif
@@ -51,8 +52,8 @@ namespace LuteceEngine
 	template <typename TEvent>
 	void EventSystem<TEvent>::Unsubscribe(void* pListener)
 	{
-#ifdef _DEBUG
 		auto it = std::find(m_pListeners.cbegin(), m_pListeners.cend(), pListener);
+#ifdef _DEBUG
 		if (it == m_pListeners.cend())
 		{
 			Logger::LogError(L"EventSystem::Unsubscribe >> Tried to remove not-subscribed listner.");
@@ -74,8 +75,8 @@ namespace LuteceEngine
 	template<typename TEvent>
 	void EventSystem<TEvent>::ConstSubscribe(void* pListener, std::function<void(const TEvent&)> pCallback)
 	{
-#ifdef _DEBUG
 		auto it = std::find(m_pConstListeners.cbegin(), m_pConstListeners.cend(), pListener);
+#ifdef _DEBUG
 		if (it != m_pConstListeners.cend())
 			Logger::LogWarning(L"EventSystem::ConstSubscribe >> Added listener again.");
 #endif
@@ -86,8 +87,8 @@ namespace LuteceEngine
 	template<typename TEvent>
 	void EventSystem<TEvent>::ConstUnsubscribe(void* pListener)
 	{
-#ifdef _DEBUG
 		auto it = std::find(m_pConstListeners.cbegin(), m_pConstListeners.cend(), pListener);
+#ifdef _DEBUG
 		if (it == m_pConstListeners.cend())
 		{
 			Logger::LogError(L"EventSystem::ConstUnsubscribe >> Tried to remove not-subscribed listener.");

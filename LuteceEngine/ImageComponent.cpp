@@ -11,6 +11,8 @@ ImageComponent::ImageComponent()
 	, m_pTexture{nullptr}
 	, m_Offset{}
 	, m_Source{}
+	, m_DestWidth{ 0.f }
+	, m_DestHeight{ 0.f }
 {}
 
 void ImageComponent::Render(std::vector<RenderBuffer>& renderBuffer) const
@@ -18,7 +20,8 @@ void ImageComponent::Render(std::vector<RenderBuffer>& renderBuffer) const
 	const auto pTrans = GetGameObject()->GetTransform();
 	const auto scale = pTrans->GetWorldScale();
 	const auto pos = pTrans->GetWorldPosition() + m_Offset * scale;
-	SDL_Rect dest{(int)pos.x, (int)pos.y, (int)(m_Source.w * scale.x), (int)(m_Source.h * scale.y)};
+	glm::vec2 destSize{ m_DestWidth != 0.f ? m_DestWidth : m_Source.w, m_DestHeight != 0.f ? m_DestHeight : m_Source.h };
+	SDL_Rect dest{(int)pos.x, (int)pos.y, (int)(destSize.x * scale.x), (int)(destSize.y * scale.y)};
 	Service<Renderer>::Get()->AddTextureToBuffer(renderBuffer, m_pTexture, pTrans->GetDepth(), dest, m_Source);
 }
 

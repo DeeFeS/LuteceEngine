@@ -80,6 +80,9 @@
     <ClCompile Include="CameraComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="CharacterComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ResourceManager.h">
@@ -175,6 +178,9 @@
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="EngineComponentTypes.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>

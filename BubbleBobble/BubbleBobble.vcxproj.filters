@@ -39,7 +39,15 @@
     <ClCompile Include="MovingState.cpp">
       <Filter>Player States</Filter>
     </ClCompile>
-    <ClCompile Include="JumpingState.cpp" />
+    <ClCompile Include="JumpingState.cpp">
+      <Filter>Player States</Filter>
+    </ClCompile>
+    <ClCompile Include="SpawnState.cpp">
+      <Filter>Player States</Filter>
+    </ClCompile>
+    <ClCompile Include="FallingState.cpp">
+      <Filter>Player States</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ScoreComponent.h">
@@ -66,6 +74,15 @@
     <ClInclude Include="MovingState.h">
       <Filter>Player States</Filter>
     </ClInclude>
-    <ClInclude Include="JumpingState.h" />
+    <ClInclude Include="JumpingState.h">
+      <Filter>Player States</Filter>
+    </ClInclude>
+    <ClInclude Include="SpawnState.h">
+      <Filter>Player States</Filter>
+    </ClInclude>
+    <ClInclude Include="Definitions.h" />
+    <ClInclude Include="FallingState.h">
+      <Filter>Player States</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

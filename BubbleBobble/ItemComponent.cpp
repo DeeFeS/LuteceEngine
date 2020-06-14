@@ -9,6 +9,7 @@ ItemComponent::ItemComponent(const int worth, const std::string& texture, const 
 	, m_Worth{ worth }
 	, m_Texture{ texture }
 	, m_Src{ src }
+	, m_LifeTime{ 5.f }
 {}
 
 void ItemComponent::PreInitialize()

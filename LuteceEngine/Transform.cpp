@@ -99,6 +99,7 @@ void LuteceEngine::Transform::SetPosition(const float x, const float y, const fl
 
 void LuteceEngine::Transform::Move(const float x, const float y, const float depth)
 {
+	//Logger::LogFormat(eLogLevel::Info, L"Move: old: (%7.2f, %7.2f) | add: (%7.2f, %7.2f)", m_Position.x, m_Position.y, x, y);
 	m_Position.x += x;
 	m_Position.y += y;
 	m_Depth += depth;

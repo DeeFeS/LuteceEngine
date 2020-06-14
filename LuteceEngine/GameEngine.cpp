@@ -58,12 +58,12 @@ void GameEngine::InitializeEngine()
 		throw std::runtime_error(std::string("SDL_CreateWindow Error: ") + SDL_GetError());
 
 	//Disable Close-Button
-	HWND hwnd = GetConsoleWindow();
+	/*HWND hwnd = GetConsoleWindow();
 	if (hwnd != NULL)
 	{
 		HMENU hMenu = GetSystemMenu(hwnd, FALSE);
 		if (hMenu != NULL) EnableMenuItem(hMenu, SC_CLOSE, MF_DISABLED);
-	}
+	}*/
 
 	Service<Renderer>::CreateInitialService<Renderer>()->Initialize(m_pWindow);
 	Service<SceneManager>::CreateInitialService<SceneManager>();
@@ -86,12 +86,12 @@ void GameEngine::ShutDownEngine()
 	SDL_Quit();
 
 	//Enable Close-Button
-	HWND hwnd = GetConsoleWindow();
+	/*HWND hwnd = GetConsoleWindow();
 	if (hwnd != NULL)
 	{
 		HMENU hMenu = GetSystemMenu(hwnd, FALSE);
 		if (hMenu != NULL) EnableMenuItem(hMenu, SC_CLOSE, MF_BYCOMMAND);
-	}
+	}*/
 
 	Logger::ShutDown();
 

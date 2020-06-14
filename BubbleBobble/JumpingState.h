@@ -5,24 +5,6 @@
 
 using namespace LuteceEngine;
 
-class Condition_ShouldJump : public StateCondition
-{
-public:
-	Condition_ShouldJump(const bool* pJump) : m_pJump{ pJump } {};
-	virtual bool Evaluate() override { return *m_pJump; };
-private:
-	const bool* m_pJump;
-};
-
-class Condition_Landed : public StateCondition
-{
-public:
-	Condition_Landed(const bool* pIsGrounded) : m_pIsGrounded{ pIsGrounded } {};
-	virtual bool Evaluate() override { return *m_pIsGrounded; };
-private:
-	const bool* m_pIsGrounded;
-};
-
 class JumpingState : public State
 {
 public:
@@ -30,12 +12,12 @@ public:
 	virtual void Enter() override;
 	virtual void Update() override;
 	virtual void Exit() override;
-	bool* GetIsGrounded() { return &m_IsGrounded; }
+	const bool* GetHasPeaked() { return &m_HasPeaked; }
 
 private:
 	const float m_JumpPower;
 	const float* m_pInput;
-	bool m_IsGrounded;
+	bool m_HasPeaked;
 	ColliderComponent* m_pCollider;
 	glm::vec2 m_Current;
 	void HandleCollision(const ColliderContact& contact);

@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "ItemComponent.h"
 #include "GameComponentTypes.h"
+#include "Definitions.h"
 
 MovingState::MovingState(float* pInput, ColliderComponent* pCollider)
 	: State{}
@@ -18,9 +19,10 @@ void MovingState::Enter()
 void MovingState::Update()
 {
 	float dt = Service<Time>::Get()->GetDelta();
-	auto dir = *m_pInput * dt;
-	const float gravity = 10.f;
-	m_pCollider->GetGameObject()->GetTransform()->Move(dir, gravity * dt);
+	const float movementSpeed = 50.f;
+	auto dir = *m_pInput * movementSpeed;
+	Logger::LogInfo(L"MOVING");
+	m_pCollider->GetGameObject()->GetTransform()->Move(dir * dt, GRAVITY * dt);
 }
 
 void MovingState::Exit()
@@ -36,7 +38,10 @@ void MovingState::HandleCollision(const ColliderContact& contact)
 		if (!pItems.empty())
 			return;
 
-		m_pCollider->GetGameObject()->GetTransform()->Move(-contact.depth.x, -contact.depth.y);
+		if (abs(contact.depth.x) < abs(contact.depth.y))
+			m_pCollider->GetGameObject()->GetTransform()->Move(-contact.depth.x, 0.f);
+		else
+			m_pCollider->GetGameObject()->GetTransform()->Move(0.f, -contact.depth.y);
 		return;
 	}
 }

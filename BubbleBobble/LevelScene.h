@@ -5,6 +5,8 @@
 
 using namespace LuteceEngine;
 
+class PlayerCharacterComponent;
+
 class LevelScene : public Scene
 {
 public:
@@ -23,9 +25,14 @@ protected:
 private:
 	std::vector<Level*> m_pLevel;
 	const int m_LevelWidth{ 32 };
-	const int m_LevelHeight{ 24 };
+	const int m_LevelHeight{ 25 };
 	const int m_TileSize;
+	int m_CurrentLevel;
 	GameObject* m_pCamera;
+	PlayerCharacterComponent* m_pPlayer1;
+	PlayerCharacterComponent* m_pPlayer2;
+
+	void OnLevelCleared();
 
 	LevelScene(const LevelScene& other) = delete;
 	LevelScene(LevelScene&& other) = delete;

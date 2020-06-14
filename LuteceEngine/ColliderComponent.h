@@ -38,6 +38,10 @@ namespace LuteceEngine
 
 	protected:
 		virtual void Initialize() override;
+//#define DRAW_COLLIDER
+#if defined(_DEBUG) & defined(DRAW_COLLIDER)
+		virtual void Render(std::vector<RenderBuffer>& renderBuffer) const override;
+#endif
 	private:
 		friend class PhysicsScene;
 		void SetScene(PhysicsScene* pScene) { m_pScene = pScene; };
@@ -53,9 +57,9 @@ namespace LuteceEngine
 		ColliderComponent& operator=(ColliderComponent&& other) = delete;
 
 		bool CalculateContact(ColliderContact& contact, ColliderComponent* pColl2);
-		bool CalculateContact_CC(ColliderContact& contact, CircleShape& shape1, CircleShape& shape2, const glm::vec2& pos1, const glm::vec2& pos2);
-		bool CalculateContact_BB(ColliderContact& contact, BoxShape& shape1, BoxShape& shape2, const glm::vec2& pos1, const glm::vec2& pos2);
-		bool CalculateContact_BC(ColliderContact& contact, BoxShape& shape1, CircleShape& shape2, const glm::vec2& pos1, const glm::vec2& pos2);
+		bool CalculateContact_CC(ColliderContact& contact, CircleShape& shape1, CircleShape& shape2, const glm::vec2& pos1, const glm::vec2& pos2, const glm::vec2& scale1, const glm::vec2& scale2);
+		bool CalculateContact_BB(ColliderContact& contact, BoxShape& shape1, BoxShape& shape2, const glm::vec2& pos1, const glm::vec2& pos2, const glm::vec2& scale1, const glm::vec2& scale2);
+		bool CalculateContact_BC(ColliderContact& contact, BoxShape& shape1, CircleShape& shape2, const glm::vec2& pos1, const glm::vec2& pos2, const glm::vec2& scale1, const glm::vec2& scale2);
 	};
 }
 

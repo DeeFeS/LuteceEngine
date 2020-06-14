@@ -3,6 +3,7 @@
 #include "FiniteStateMachine.h"
 #include "ScoreComponent.h"
 #include "InputManager.h"
+#include "SpawnState.h"
 
 using namespace LuteceEngine;
 
@@ -14,6 +15,7 @@ public:
 
 	const int GetId() { return m_PlayerId; }
 	void Damage();
+	void SetStartPos(const glm::vec2& pos);
 
 	virtual void PreInitialize() override;
 	virtual void Initialize() override;
@@ -26,12 +28,18 @@ private:
 	float m_InputX;
 	bool m_Jump;
 	bool m_Shoot;
+	bool m_IsFalling;
+	glm::vec2 m_LastPosition;
 	int m_Lifes;
 	ImageComponent* m_pImage;
 	ImageComponent* m_pImageAdditional;
 	FiniteStateMachine* m_pFSM;
 	ScoreComponent* m_pScore;
 	ColliderComponent* m_pCollider;
+	SpawnState* m_pSpawn;
+
+	void InitializeInput();
+	void InitializeFSM();
 
 	PlayerCharacterComponent(const PlayerCharacterComponent& other) = delete;
 	PlayerCharacterComponent(PlayerCharacterComponent&& other) = delete;

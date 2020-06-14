@@ -38,3 +38,8 @@ bool StateConditionCollection::Evaluate()
 	}
 	return true;
 }
+
+bool LuteceEngine::BoolPointerCondition::Evaluate()
+{
+	return !m_Invert ? *m_pValue : !*m_pValue;
+}

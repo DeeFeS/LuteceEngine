@@ -4,6 +4,7 @@
 #include <glm/vec2.hpp>
 #pragma warning(pop)
 #include "Utilities.h"
+#include <vector>
 
 namespace LuteceEngine
 {

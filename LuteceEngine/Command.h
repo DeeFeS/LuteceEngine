@@ -44,8 +44,8 @@ namespace LuteceEngine
 
 		void AddCallback(void* pListener, std::function<void(Args...)> pCallback)
 		{
-#ifdef _DEBUG
 			auto it = std::find(m_pListeners.cbegin(), m_pListeners.cend(), pListener);
+#ifdef _DEBUG
 			if (it != m_pListeners.cend())
 				Logger::LogWarning(L"CallbackVectorCommand::Add >> Added listener again.");
 #endif
@@ -55,8 +55,8 @@ namespace LuteceEngine
 
 		void RemoveCallback(void* pListener)
 		{
-#ifdef _DEBUG
 			auto it = std::find(m_pListeners.cbegin(), m_pListeners.cend(), pListener);
+#ifdef _DEBUG
 			if (it == m_pListeners.cend())
 			{
 				Logger::LogError(L"CallbackVectorCommand::Remove >> Tried to remove non-existent listener.");

@@ -7,7 +7,9 @@ LuteceEngine::Time* LuteceEngine::Service<LuteceEngine::Time>::m_pInitialService
 void LuteceEngine::Time::Update()
 {
 	auto thisFrame = high_resolution_clock::now();
-	m_DeltaTime = float(duration_cast<duration<float>>(thisFrame - m_LastFrame).count()) * m_Settings.timeScale;
+	std::chrono::duration<double> elapsed = thisFrame - m_LastFrame;
+	m_DeltaTime = float(elapsed.count()) * m_Settings.timeScale;
+	//Logger::LogFormat(eLogLevel::Info, L"DT: %7.5f", m_DeltaTime);
 	m_FixedTick += m_DeltaTime;
 	m_LastFrame = thisFrame;
 }

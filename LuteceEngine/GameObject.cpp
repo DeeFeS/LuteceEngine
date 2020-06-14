@@ -30,14 +30,14 @@ void LuteceEngine::GameObject::Initialize(Scene* pScene)
 	for (size_t i = 0; i < m_pComponents.size(); i++)
 		m_pComponents[i]->PreInitialize();
 
+	m_IsInitialized = true;
+
 	for (size_t i = 0; i < m_pComponents.size(); i++)
 	{
 		m_pComponents[i]->Initialize();
 		if (m_pComponents[i]->IsActive())
 			m_pComponents[i]->OnEnable();
 	}
-
-	m_IsInitialized = true;
 }
 
 void LuteceEngine::GameObject::Update()
@@ -149,6 +149,11 @@ void LuteceEngine::GameObject::AddComponent(Component* pComponent)
 
 	m_pComponents.push_back(pComponent);
 	pComponent->SetGameObject(this);
+	if (!m_IsInitialized)
+		return;
+	pComponent->Initialize();
+	if (pComponent->IsActive())
+		pComponent->OnEnable();
 }
 
 void LuteceEngine::GameObject::RemoveComponent(Component* pComponent, const bool deleteComponent)
