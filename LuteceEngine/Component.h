@@ -32,6 +32,7 @@ namespace LuteceEngine
 	protected:
 		virtual void PreInitialize() {};
 		virtual void Initialize() {};
+		virtual void PostInitialize() {};
 		virtual void Update() {};
 		virtual void FixedUpdate() {};
 		virtual void OnEnable() {};

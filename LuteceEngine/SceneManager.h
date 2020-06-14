@@ -10,8 +10,10 @@ namespace LuteceEngine
 	{
 	public:
 		Scene* AddScene(Scene* pNewScene);
+		void DeleteScene(Scene* pScene);
 		void SetActiveScene(Scene* pScene);
 		Scene* GetActiveScene() const { return m_pActiveScene; }
+		std::vector<Scene*> GetScenes() { return m_pScenes; };
 
 		void Initialize();
 		void Update();

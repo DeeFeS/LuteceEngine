@@ -23,7 +23,7 @@ PlayerCharacterComponent::PlayerCharacterComponent(const int playerId, const eCo
 	, m_PlayerId{ playerId }
 	, m_ControllerId{ controllerId }
 	, m_pFSM{ nullptr }
-	, m_pScore{ nullptr }
+	//, m_pScore{ nullptr }
 	, m_pCollider{ nullptr }
 	, m_Sprites{}
 	, m_pSprite{ nullptr }
@@ -67,18 +67,17 @@ void PlayerCharacterComponent::PreInitialize()
 {
 	InitializeSpriteData();
 
-	m_pScore = new ScoreComponent{ m_PlayerId };
-	auto pGo = new GameObject{};
+	//m_pScore = new ScoreComponent{ m_PlayerId };
+	/*auto pGo = new GameObject{};
 	pGo->AddComponent(m_pScore);
-	//GetGameObject()->GetScene()->Add(pGo);
 	auto pCameraTrans = static_cast<LevelScene*>(GetGameObject()->GetScene())->GetCamera()->GetGameObject()->GetTransform();
-	pGo->GetTransform()->SetParent(pCameraTrans);
+	pGo->GetTransform()->SetParent(pCameraTrans);*/
 
-	if (m_PlayerId == 1)
-	{
-		m_pScore->GetText()->SetAlignment(eAlignment::Right);
-		pGo->GetTransform()->Move(float(GameEngine::GetWindow().width), 0.f);
-	}
+	//if (m_PlayerId == 1)
+	//{
+	//	//m_pScore->GetText()->SetAlignment(eAlignment::Right);
+	//	pGo->GetTransform()->Move(float(GameEngine::GetWindow().width), 0.f);
+	//}
 
 	m_pSprite = new SpriteComponent{ m_Sprites[eSprite::SpawnUp] };
 	GetGameObject()->AddComponent(m_pSprite);
@@ -124,6 +123,10 @@ void PlayerCharacterComponent::Initialize()
 	InitializeInput();
 	InitializeFSM();
 	GetTransform()->SetPosition(256.f, 100.f);
+}
+
+void PlayerCharacterComponent::PostInitialize()
+{
 }
 
 void PlayerCharacterComponent::Update()
@@ -310,7 +313,7 @@ void PlayerCharacterComponent::HandleShoot()
 void PlayerCharacterComponent::Shoot()
 {
 	auto pGo = new GameObject{};
-	auto pSprite = new SpriteComponent("Sprites1.png", 32, 16, 8 * 12, 8 * 12 + 7, 8);
+	auto pSprite = new SpriteComponent(m_Sprites[eSprite::Bubble]);
 	pGo->AddComponent(pSprite);
 
 	CircleShape* pCircle = new CircleShape{};

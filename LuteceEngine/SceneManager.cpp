@@ -5,6 +5,24 @@
 LuteceEngine::SceneManager* LuteceEngine::Service<LuteceEngine::SceneManager>::m_pService = nullptr;
 LuteceEngine::SceneManager* LuteceEngine::Service<LuteceEngine::SceneManager>::m_pInitialService = nullptr;
 
+void LuteceEngine::SceneManager::DeleteScene(Scene* pScene)
+{
+	if (pScene == m_pActiveScene)
+		return;
+
+	for (size_t i = 0; i < m_pScenes.size(); i++)
+	{
+		if (pScene == m_pScenes[i])
+		{
+			m_pScenes[i]->ShutDownRoot();
+			delete m_pScenes[i];
+			m_pScenes[i] = m_pScenes.back();
+			m_pScenes.pop_back();
+			return;
+		}
+	}
+}
+
 void LuteceEngine::SceneManager::Initialize()
 {
 	if (m_IsInitialized)

@@ -5,11 +5,15 @@
 #include "Logger.h"
 #include "Scene.h"
 
+size_t LuteceEngine::GameObject::m_NextId{ 0 };
+
 LuteceEngine::GameObject::GameObject()
 	: m_pTransform{ nullptr }
 	, m_pScene{ nullptr }
+	, m_Id{ m_NextId++ }
 {
 	m_pTransform = new Transform(this);
+	//Logger::LogFormat(eLogLevel::Info, L"GO::Create %i", m_Id);
 }
 
 LuteceEngine::GameObject::~GameObject()
@@ -22,6 +26,7 @@ LuteceEngine::GameObject::~GameObject()
 
 void LuteceEngine::GameObject::Initialize(Scene* pScene)
 {
+	//Logger::LogFormat(eLogLevel::Info, L"GO::Initialize %i", m_Id);
 	if (m_IsInitialized)
 		return;
 
@@ -45,6 +50,9 @@ void LuteceEngine::GameObject::Initialize(Scene* pScene)
 		if (m_pComponents[i]->IsActive())
 			m_pComponents[i]->OnEnable();
 	}
+
+	for (size_t i = 0; i < m_pComponents.size(); i++)
+		m_pComponents[i]->PostInitialize();
 }
 
 void LuteceEngine::GameObject::Update()
@@ -112,7 +120,7 @@ void LuteceEngine::GameObject::OnDestroy()
 	for (int i = int(m_pComponents.size()) - 1; i >= 0; i--)
 	{
 		m_pComponents[i]->OnDisable();
-		m_pComponents[i]->OnDestroy();
+		m_pComponents[i]->RootDestroy();
 		SafeDelete(m_pComponents[i]);
 	}
 	m_pComponents.clear();
@@ -179,7 +187,9 @@ void LuteceEngine::GameObject::AddComponent(Component* pComponent)
 	pComponent->SetGameObject(this);
 	if (!m_IsInitialized)
 		return;
+	pComponent->PreInitialize();
 	pComponent->Initialize();
+	pComponent->PostInitialize();
 	if (pComponent->IsActive())
 		pComponent->OnEnable();
 }
@@ -254,7 +264,7 @@ void LuteceEngine::GameObject::CleanUp()
 		if (!m_pComponents[i]->IsDestroyed())
 			continue;
 
-		m_pComponents[i]->OnDestroy();
+		m_pComponents[i]->RootDestroy();
 		SafeDelete(m_pComponents[i]);
 		m_pComponents.erase(m_pComponents.cbegin() + i);
 	}

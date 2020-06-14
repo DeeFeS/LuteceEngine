@@ -17,7 +17,7 @@ JumpingState::JumpingState(float jumpPower, float* pInput, ColliderComponent* pC
 
 void JumpingState::Enter()
 {
-	Logger::LogInfo(L"Enter: Jumping");
+	//Logger::LogInfo(L"Enter: Jumping");
 	m_Current.y = -m_JumpPower;
 	m_pCollider->GetOnCollision().AddCallback(this, [this](const ColliderContact& contact) { HandleCollision(contact); });
 	m_HasPeaked = false;

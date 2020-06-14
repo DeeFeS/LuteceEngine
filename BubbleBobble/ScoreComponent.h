@@ -17,6 +17,7 @@ class ScoreComponent : public Component
 {
 public:
 	ScoreComponent(const int playerId);
+	ScoreComponent(const int playerId, TextComponent* pText);
 	virtual ~ScoreComponent() override;
 	TextComponent* GetText() { return m_pText; }
 

@@ -58,7 +58,7 @@ void LuteceEngine::FiniteStateMachine::AddState(State* pState, std::vector<State
 void FiniteStateMachine::ChangeState(std::pair<State*, std::vector<StateConnection>> pNewState)
 {
 #ifdef _DEBUG
-	Logger::LogInfo(L"FSM: State Changed");
+	//Logger::LogInfo(L"FSM: State Changed");
 #endif // _DEBUG
 
 	m_pCurrentState.first->Exit();

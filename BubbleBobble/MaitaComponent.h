@@ -31,7 +31,7 @@ private:
 		Left, Right, Boulder, Caught, Popped
 	};
 
-	ScoreComponent* m_pScore;
+	//ScoreComponent* m_pScore;
 	SpriteComponent* m_pSprite;
 	ColliderComponent* m_pCollider;
 	const eControllerIdx m_Controller;

@@ -16,7 +16,7 @@ LuteceEngine::ColliderComponent::ColliderComponent(PhysicsShape* pShape, const b
 
 LuteceEngine::ColliderComponent::~ColliderComponent()
 {
-	GetGameObject()->GetScene()->GetPhysicsScene()->RemoveCollider(this);
+	m_pScene->RemoveCollider(this);
 	SafeDelete(m_pShape);
 }
 

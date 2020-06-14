@@ -59,6 +59,8 @@ namespace LuteceEngine
 		bool m_IsInitialized = false;
 		bool m_IsDestroyed = false;
 		bool m_IsEnabled = true;
+		size_t m_Id;
+		static size_t m_NextId;
 	};
 
 	template<typename T>

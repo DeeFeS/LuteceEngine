@@ -77,7 +77,7 @@ void Level::LoadLevelFromFile()
 				pGo->AddComponent(pEnemy);
 				m_pEnemies.push_back(pEnemy);
 				pZen->SetStartPos({ m_TileSize * i, m_TileSize * lineCounter });
-				Logger::LogFormat(eLogLevel::Info, L"Zen(%i) x: %7.2f | y: %7.2f", i, pZen->GetStartPosition().x, pZen->GetStartPosition().y);
+				//Logger::LogFormat(eLogLevel::Info, L"Zen(%i) x: %7.2f | y: %7.2f", i, pZen->GetStartPosition().x, pZen->GetStartPosition().y);
 				//pGo->GetTransform()->SetPosition({ m_TileSize * i, m_TileSize * lineCounter });
 				continue;
 			}
@@ -90,7 +90,7 @@ void Level::LoadLevelFromFile()
 				pGo->AddComponent(pEnemy);
 				m_pEnemies.push_back(pEnemy);
 				pMaita->SetStartPos({ m_TileSize * i, m_TileSize * lineCounter });
-				Logger::LogFormat(eLogLevel::Info, L"Maita(%i) x: %7.2f | y: %7.2f", i, pMaita->GetStartPosition().x, pMaita->GetStartPosition().y);
+				//Logger::LogFormat(eLogLevel::Info, L"Maita(%i) x: %7.2f | y: %7.2f", i, pMaita->GetStartPosition().x, pMaita->GetStartPosition().y);
 				//pGo->GetTransform()->SetPosition({ m_TileSize * i, m_TileSize * lineCounter });
 				continue;
 			}

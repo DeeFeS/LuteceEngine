@@ -12,18 +12,29 @@ std::vector<void*> EventSystem<Event_PointsScored>::m_pConstListeners = {};
 
 ScoreComponent::ScoreComponent(const int playerId)
 	: Component((int)eGameComponentType::Score)
-	, m_CurrentScore{0}
-	, m_pText{nullptr}
-	, m_PlayerId{playerId}
+	, m_CurrentScore{ 0 }
+	, m_pText{ nullptr }
+	, m_PlayerId{ playerId }
 {}
 
-ScoreComponent::~ScoreComponent(){}
+ScoreComponent::ScoreComponent(const int playerId, TextComponent* pText)
+	: Component((int)eGameComponentType::Score)
+	, m_CurrentScore{ 0 }
+	, m_pText{ pText }
+	, m_PlayerId{ playerId }
+{}
+
+ScoreComponent::~ScoreComponent() {}
 
 void ScoreComponent::PreInitialize()
 {
-	auto pFont = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
-	m_pText = new TextComponent{ std::to_string(m_CurrentScore), pFont };
-	GetGameObject()->AddComponent(m_pText);
+	if (!m_pText)
+	{
+		auto pFont = ResourceManager::GetInstance().LoadFont("Lingua.otf", 32);
+		m_pText = new TextComponent("", pFont);
+		GetGameObject()->AddComponent(m_pText);
+	}
+	m_pText->SetText(std::to_string(m_CurrentScore));
 }
 
 void ScoreComponent::OnEnable()

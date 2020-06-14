@@ -60,6 +60,7 @@
     <ClCompile Include="ZenChanComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="MainMenuScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ScoreComponent.h">
@@ -108,5 +109,6 @@
     <ClInclude Include="ZenChanComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
+    <ClInclude Include="MainMenuScene.h" />
   </ItemGroup>
 </Project>

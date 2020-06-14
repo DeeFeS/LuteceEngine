@@ -168,6 +168,7 @@
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="LevelScene.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MainMenuScene.cpp" />
     <ClCompile Include="MaitaComponent.cpp" />
     <ClCompile Include="MovingState.cpp" />
     <ClCompile Include="PlayerCharacterComponent.cpp" />
@@ -191,6 +192,7 @@
     <ClInclude Include="JumpingState.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="LevelScene.h" />
+    <ClInclude Include="MainMenuScene.h" />
     <ClInclude Include="MaitaComponent.h" />
     <ClInclude Include="MovingState.h" />
     <ClInclude Include="PlayerCharacterComponent.h" />

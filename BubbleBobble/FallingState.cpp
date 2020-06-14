@@ -20,7 +20,7 @@ FallingState::FallingState(const float* pInput, ColliderComponent* pCollider, co
 
 void FallingState::Enter()
 {
-	Logger::LogInfo(L"Enter: Falling");
+	//Logger::LogInfo(L"Enter: Falling");
 	m_pCollider->GetOnCollision().AddCallback(this, [this](const ColliderContact& contact) { HandleCollision(contact); });
 	m_Current.x = *m_pInput;
 	m_Current.y = 0.f;

@@ -29,18 +29,26 @@ std::vector<std::function<void(const Event_RemoveLevelElement&)>> EventSystem<Ev
 std::vector<void*> EventSystem<Event_RemoveLevelElement>::m_pListeners = {};
 std::vector<void*> EventSystem<Event_RemoveLevelElement>::m_pConstListeners = {};
 
+std::vector<std::function<void(Event_LifeLost&)>> EventSystem<Event_LifeLost>::m_pCallbacks = {};
+std::vector<std::function<void(const Event_LifeLost&)>> EventSystem<Event_LifeLost>::m_pConstCallbacks = {};
+std::vector<void*> EventSystem<Event_LifeLost>::m_pListeners = {};
+std::vector<void*> EventSystem<Event_LifeLost>::m_pConstListeners = {};
 
-LevelScene::LevelScene()
+
+LevelScene::LevelScene(const eGameMode mode)
 	: Scene{ "LevelScene" }
 	, m_pCamera{ nullptr }
-	, m_pText{ nullptr }
+	, m_pLevelText{ nullptr }
+	, m_pLifesText{ nullptr }
+	, m_pScore1{ nullptr }
+	, m_pScore2{ nullptr }
 	, m_TileSize{ (int)BubbleBobble::GetTileSize() }
 	, m_CurrentLevel{ 0 }
 	, m_pPlayer1{ nullptr }
-#if defined(VERSUS) | defined(COOP)
 	, m_pPlayer2{ nullptr }
-#endif // (VERSUS) | defined(COOP)
+	, m_pPlayerMaita{ nullptr }
 	, m_Bounds{}
+	, m_Mode{ mode }
 {}
 
 LevelScene::~LevelScene()
@@ -53,87 +61,90 @@ void LevelScene::Initialize()
 {
 	EventSystem<Event_AddLevelElement>::ConstSubscribe(this, [this](const Event_AddLevelElement&) { m_LevelElements++; });
 	EventSystem<Event_RemoveLevelElement>::ConstSubscribe(this, [this](const Event_RemoveLevelElement&) { m_LevelElements--; });
+	//EventSystem<Event_LifeLost>::ConstSubscribe(this, [this](const Event_LifeLost& e)
+	//	{
+	//		switch (m_Mode)
+	//		{
+	//		case eGameMode::Single:
+	//			m_pLifesText;
+	//			break;
+	//		case eGameMode::Coop:
+	//			break;
+	//		case eGameMode::Versus:
 
-	/*auto pGo = new GameObject{};
-	CircleShape* pCircle = new CircleShape{};
-	pCircle->radius = 16.f;
-	pCircle->center = glm::vec2{ 8.f, 8.f };
-	auto pPlayer = new CharacterComponent(pCircle, eControllerIdx::Controller1);*/
-	/*BoxShape* pBox = new BoxShape{};
-	pBox->halfW = 8.f;
-	pBox->halfH = 8.f;
-	pBox->center = glm::vec2{ 8.f, 8.f };
-	auto pPlayer = new CharacterComponent(pBox, eControllerIdx::Controller1);*/
-	/*pGo = new GameObject{};
-	pCircle = new CircleShape{};
-	pCircle->radius = 32.f;
-	pCircle->center = glm::vec2{ 0.f, 0.f };
-	pGo->AddComponent(new ColliderComponent(pCircle, true));
-	Add(pGo);
-	pGo->GetTransform()->SetPosition(200.f, 250.f);*/
+	//			break;
+	//		default:
+	//			break;
+	//		};
+	//	});
 
-	//pGo->AddComponent(new ScoreComponent{ -1 });
 
+
+	auto pFont = ResourceManager::GetInstance().LoadFont("Lingua.otf", 16);
 	auto pGo = new GameObject{};
+	m_pCamera = new CameraComponent{};
+	pGo->AddComponent(m_pCamera);
+
+	m_pLevelText = new TextComponent("01", pFont);
+	m_pLevelText->SetAlignment(eAlignment::Center);
+	pGo->AddComponent(m_pLevelText);
+
+	m_pLifesText = new TextComponent("4", pFont);
+	m_pLifesText->SetAlignment(eAlignment::Center);
+	pGo->AddComponent(m_pLifesText);
+
+	SetActiveCamera(m_pCamera);
+	Add(pGo);
+
+	m_pLevel.push_back(new Level(m_CurrentLevel));
+	m_pLevel[0]->Initialize();
+
+	pGo = new GameObject{};
 	m_pPlayer1 = new PlayerCharacterComponent(0, eControllerIdx::Keyboard);
 	pGo->AddComponent(m_pPlayer1);
 	Add(pGo);
 
-#ifdef COOP
+	pFont = ResourceManager::GetInstance().LoadFont("Lingua.otf", 32);
+	auto pText = new TextComponent("0", pFont);
 	pGo = new GameObject{};
-	m_pPlayer2 = new PlayerCharacterComponent(1, eControllerIdx::Controller1);
-	pGo->AddComponent(m_pPlayer2);
-	Add(pGo);
-#endif // TWO_PLAYERS
+	pGo->AddComponent(pText);
+	if (m_Mode == eGameMode::Single)
+	{
+		m_pScore1 = new ScoreComponent(-1, pText);
+		pGo->AddComponent(m_pScore1);
+		Add(pGo);
+	}
+	if (m_Mode == eGameMode::Coop)
+	{
+		m_pScore1 = new ScoreComponent(-1, pText);
+		pGo->AddComponent(m_pScore1);
+		Add(pGo);
 
-#ifdef VERSUS
-	pGo = new GameObject{};
-	m_pPlayer2 = new MaitaComponent(eControllerIdx::Controller1);
-	m_pPlayer2->SetBounds(&m_Bounds);
-	pGo->AddComponent(m_pPlayer2);
-	pGo->AddComponent(new EnemyComponent{ eEnemy::Maita });
-	Add(pGo);
-#endif // TWO_PLAYERS
+		pGo = new GameObject{};
+		m_pPlayer2 = new PlayerCharacterComponent(1, eControllerIdx::Controller1);
+		pGo->AddComponent(m_pPlayer2);
+		Add(pGo);
+	}
+	if (m_Mode == eGameMode::Versus)
+	{
+		m_pScore1 = new ScoreComponent(0, pText);
+		pGo->AddComponent(m_pScore1);
+		Add(pGo);
 
+		pGo = new GameObject{};
+		pText = new TextComponent("0", pFont);
+		pGo->AddComponent(pText);
+		m_pScore2 = new ScoreComponent(1, pText);
+		pGo->AddComponent(m_pScore2);
+		Add(pGo);
 
-
-	pGo = new GameObject{};
-	m_pCamera = new CameraComponent{};
-	pGo->AddComponent(m_pCamera);
-	auto pFont = ResourceManager::GetInstance().LoadFont("Lingua.otf", 16);
-	m_pText = new TextComponent("01", pFont);
-	m_pText->SetAlignment(eAlignment::Center);
-	SetActiveCamera(m_pCamera);
-	pGo->AddComponent(m_pText);
-	Add(pGo);
-
-	//auto pInput = Service<InputManager>::Get();
-	/*auto pButton = new ButtonCommand(eControllerIdx::Keyboard, VK_LBUTTON, eControllerButton::None, eInputState::Pressed);
-	pButton->SetCallback([]() -> bool { Logger::LogInfo(L"Keyboard PRESSED Left Mouse"); return false; });
-	pInput->AddCommand(pButton);*/
-
-	//pButton = new ButtonCommand(eControllerIdx::Controller1, 0, eControllerButton::ButtonA, eInputState::Down);
-	//pButton->SetCallback([]() -> bool { Logger::LogInfo(L"Controller 1 DOWN A"); return false; });
-	//pInput->AddCommand(pButton);
-
-	//auto pButton = new ButtonCommand(eControllerIdx::Controller1, 0, eControllerButton::Start, eInputState::Released);
-	//pButton->SetCallback([]() -> bool { EventSystem<Event_LevelCleared>::ConstInvoke(Event_LevelCleared{}); return false; });
-	//pInput->AddCommand(pButton);
-
-	///*auto pAxis = new AxisCommand(eControllerIdx::Controller1, 'W', 'S', eControllerAxis::LeftThumbY);
-	//pAxis->SetCallback([this](float value) -> bool { m_pCamera->GetTransform()->Scale(value, value); return false; });
-	//pInput->AddCommand(pAxis);*/
-
-	//auto pAxis = new AxisCommand(eControllerIdx::Controller1, 0, 0, eControllerAxis::RightThumbY);
-	//pAxis->SetCallback([this](float value) -> bool { m_pCamera->GetTransform()->Move(0.f, -value * 10.f); return false; });
-	//pInput->AddCommand(pAxis);
-
-	//pAxis = new AxisCommand(eControllerIdx::Controller1, 0, 0, eControllerAxis::RightThumbX);
-	//pAxis->SetCallback([this](float value) -> bool { m_pCamera->GetTransform()->Move(value * 10.f, 0.f); return false; });
-	//pInput->AddCommand(pAxis);
-
-	m_pLevel.push_back(new Level(m_CurrentLevel));
-	m_pLevel[0]->Initialize();
+		pGo = new GameObject{};
+		m_pPlayerMaita = new MaitaComponent(eControllerIdx::Controller1);
+		m_pPlayerMaita->SetBounds(&m_Bounds);
+		pGo->AddComponent(m_pPlayerMaita);
+		pGo->AddComponent(new EnemyComponent{ eEnemy::Maita });
+		Add(pGo);
+	}
 }
 
 void LevelScene::PostInitialize()
@@ -167,44 +178,34 @@ void LevelScene::PostInitialize()
 		Add(pEnemies[i]->GetGameObject());
 	}
 
-	m_pText->SetOffset({ window.width / 2.f, m_TileSize * 2.5f });
+	if (m_pScore2)
+	{
+		m_pScore2->GetText()->SetOffset({ window.width, 0.f });
+		m_pScore2->GetText()->SetAlignment(eAlignment::Right);
+	}
+
+	m_pLevelText->SetOffset({ window.width / 2.f, m_TileSize * 2.5f });
+	m_pLifesText->SetOffset({ levelPos.x + m_TileSize * 1.5f, levelPos.y + (m_LevelHeight - 1) * m_TileSize });
 
 	m_Bounds.topLeft = levelPos + glm::vec2{ m_TileSize * 2.f, 0.f };
 	m_Bounds.width = float((m_LevelWidth - 4) * m_TileSize);
 	m_Bounds.height = float(m_LevelHeight * m_TileSize);
 
-	Logger::LogFormat(eLogLevel::Info, L"Bounds: %7.2f, %7.2f, %7.2f, %7.2f", m_Bounds.topLeft.x, m_Bounds.topLeft.y, m_Bounds.width, m_Bounds.height);
+	//Logger::LogFormat(eLogLevel::Info, L"Bounds: %7.2f, %7.2f, %7.2f, %7.2f", m_Bounds.topLeft.x, m_Bounds.topLeft.y, m_Bounds.width, m_Bounds.height);
 
 	m_pPlayer1->GetTransform()->SetPosition(window.width / 2.f - 50.f, m_TileSize * 2.f, 0.f);
 	m_pPlayer1->SetStartPos({ levelPos.x + 4 * m_TileSize, levelPos.y + (m_LevelHeight - 1.5f) * m_TileSize });
 
-#ifdef COOP
-	m_pPlayer2->GetTransform()->SetPosition(window.width / 2.f + 50.f, m_TileSize * 2.f, 0.1f);
-	m_pPlayer2->SetStartPos({ levelPos.x + (m_LevelWidth - 4) * m_TileSize, levelPos.y + (m_LevelHeight - 1.5f) * m_TileSize });
-#endif // TWO_PLAYERS
-
-#ifdef VERSUS
-	m_pPlayer2->SetStartPos({ window.width / 2.f, window.height / 2.f });
-	m_pPlayer2->GetTransform()->SetPosition(window.width / 2.f, window.height / 2.f, 0.1f);
-#endif // TWO_PLAYERS
-
-	/*pGo = new GameObject{};
-	auto pMaita = new MaitaComponent(eControllerIdx::None);
-	pMaita->SetBounds(&m_Bounds);
-	pGo->AddComponent(pMaita);
-	pGo->AddComponent(new EnemyComponent{ eEnemy::Maita });
-	Add(pGo);
-	pMaita->SetStartPos({ window.width / 2.f, window.height / 2.f });
-	pMaita->GetTransform()->SetPosition(window.width / 2.f, window.height / 2.f, 0.1f);*/
-
-	/*pGo = new GameObject{};
-	auto pZen = new ZenChanComponent();
-	pZen->SetBounds(&m_Bounds);
-	pZen->SetStartPos({ window.width / 2.f, window.height / 2.f });
-	pGo->AddComponent(pZen);
-	pGo->AddComponent(new EnemyComponent{ eEnemy::ZenChan });
-	Add(pGo);
-	pZen->GetTransform()->SetPosition(window.width / 2.f, window.height / 5.f, 0.1f);*/
+	if (m_Mode == eGameMode::Coop)
+	{
+		m_pPlayer2->GetTransform()->SetPosition(window.width / 2.f + 50.f, m_TileSize * 2.f, 0.1f);
+		m_pPlayer2->SetStartPos({ levelPos.x + (m_LevelWidth - 4) * m_TileSize, levelPos.y + (m_LevelHeight - 1.5f) * m_TileSize });
+	}
+	if (m_Mode == eGameMode::Versus)
+	{
+		m_pPlayerMaita->GetTransform()->SetPosition(window.width / 2.f + 50.f, m_TileSize * 2.f, 0.1f);
+		m_pPlayerMaita->SetStartPos({ levelPos.x + (m_LevelWidth - 4) * m_TileSize, levelPos.y + (m_LevelHeight - 1.5f) * m_TileSize });
+	}
 }
 
 void LevelScene::SceneUpdate()
@@ -275,6 +276,13 @@ void LevelScene::OnLevelCleared()
 		m_Bounds.topLeft = levelPos + glm::vec2{ m_TileSize * 2.f, 0.f };
 		m_pPlayer1->SetStartPos({ levelPos.x + 4 * m_TileSize, levelPos.y + (m_LevelHeight - 1.5f) * m_TileSize });
 
+		if (m_Mode == eGameMode::Coop)
+			m_pPlayer2->SetStartPos({ levelPos.x + (m_LevelWidth - 4) * m_TileSize, levelPos.y + (m_LevelHeight - 1.5f) * m_TileSize });
+
+		if (m_Mode == eGameMode::Versus)
+			m_pPlayerMaita->SetStartPos({ levelPos.x + (m_LevelWidth - 4) * m_TileSize, levelPos.y + (m_LevelHeight - 1.5f) * m_TileSize });
+		
+
 		auto pEnemies = m_pLevel[m_CurrentLevel]->GetEnemies();
 		m_LevelElements = pEnemies.size();
 		for (size_t i = 0; i < pEnemies.size(); i++)
@@ -305,8 +313,8 @@ void LevelScene::OnLevelCleared()
 	{
 		std::stringstream ss{};
 		ss << 0 << m_CurrentLevel;
-		m_pText->SetText(ss.str());
+		m_pLevelText->SetText(ss.str());
 	}
 	else
-		m_pText->SetText(std::to_string(m_CurrentLevel + 1));
+		m_pLevelText->SetText(std::to_string(m_CurrentLevel + 1));
 }

@@ -15,7 +15,7 @@ MaitaComponent::MaitaComponent(const eControllerIdx controller)
 	, m_LastDirection{ eDirection::Left }
 	, m_pBounds{ nullptr }
 	, m_pCollider{ nullptr }
-	, m_pScore{ nullptr }
+	//, m_pScore{ nullptr }
 	, m_pSprite{ nullptr }
 	, m_Shoot{ false }
 	, m_ShootCooldown{ 1.f }
@@ -35,16 +35,16 @@ void MaitaComponent::PreInitialize()
 {
 	InitializeSpriteData();
 
-	if (m_Controller != eControllerIdx::None)
-	{
-		m_pScore = new ScoreComponent{ 1 };
-		auto pGo = new GameObject{};
-		pGo->AddComponent(m_pScore);
-		auto pCameraTrans = static_cast<LevelScene*>(GetGameObject()->GetScene())->GetCamera()->GetGameObject()->GetTransform();
-		pGo->GetTransform()->SetParent(pCameraTrans);
+	//if (m_Controller != eControllerIdx::None)
+	//{
+	//	//m_pScore = new ScoreComponent{ 1 };
+	//	auto pGo = new GameObject{};
+	//	pGo->AddComponent(m_pScore);
+	//	auto pCameraTrans = static_cast<LevelScene*>(GetGameObject()->GetScene())->GetCamera()->GetGameObject()->GetTransform();
+	//	pGo->GetTransform()->SetParent(pCameraTrans);
 
-		pGo->GetTransform()->Move(float(GameEngine::GetWindow().width), 0.f);
-	}
+	//	pGo->GetTransform()->Move(float(GameEngine::GetWindow().width), 0.f);
+	//}
 
 	m_pSprite = new SpriteComponent{ m_Sprites[eSprite::Left] };
 	GetGameObject()->AddComponent(m_pSprite);
@@ -282,7 +282,7 @@ void MaitaComponent::HandleDirection()
 {
 	if (m_Controller != eControllerIdx::None)
 	{
-		m_pScore->GetText()->SetAlignment(eAlignment::Right);
+		//m_pScore->GetText()->SetAlignment(eAlignment::Right);
 	}
 	if (m_LastDirection == eDirection::Left && m_Input.x <= 0.f)
 	{

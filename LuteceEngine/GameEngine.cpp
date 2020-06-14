@@ -70,6 +70,10 @@ void GameEngine::InitializeEngine()
 	Service<InputManager>::CreateInitialService<InputManager>();
 	Service<Time>::CreateInitialService<Time>();
 
+	Service<InputManager>::Get()->Update();
+	Service<InputManager>::Get()->Update();
+
+
 	// tell the resource manager where he can find the game data
 	ResourceManager::GetInstance().Init("../Resources/");
 }

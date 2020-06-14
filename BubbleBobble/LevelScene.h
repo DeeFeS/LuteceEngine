@@ -3,6 +3,7 @@
 #include "Level.h"
 #include "EventSystem.h"
 #include "TextComponent.h"
+#include "ScoreComponent.h"
 
 using namespace LuteceEngine;
 
@@ -13,6 +14,10 @@ class PlayerCharacterComponent;
 
 struct Event_AddLevelElement {};
 struct Event_RemoveLevelElement {};
+struct Event_LifeLost
+{
+	const int playerId;
+};
 
 struct LevelBounds
 {
@@ -22,15 +27,24 @@ struct LevelBounds
 
 class MaitaComponent;
 
+enum class eGameMode
+{
+	Single = 0, Coop = 1, Versus = 2
+};
+
 class LevelScene : public Scene
 {
 public:
-	LevelScene();
+	LevelScene(const eGameMode mode);
 	~LevelScene();
 	CameraComponent* GetCamera() { return m_pCamera; };
 	const LevelBounds& GetLevelBounds() { return m_Bounds; }
 	PlayerCharacterComponent* GetPlayer1() { return m_pPlayer1; }
-	//PlayerCharacterComponent* GetPlayer2() { return m_pPlayer2; }
+	PlayerCharacterComponent* GetPlayer2() { return m_pPlayer2; }
+	MaitaComponent* GetPlayerMaita() { return m_pPlayerMaita; }
+
+	void SetMode(const eGameMode mode) { m_Mode = mode; };
+	eGameMode GetMode() { return m_Mode; };
 
 protected:
 	// Inherited via Scene
@@ -51,14 +65,15 @@ private:
 	CameraComponent* m_pCamera;
 	PlayerCharacterComponent* m_pPlayer1;
 	size_t m_LevelElements;
-#ifdef COOP
 	PlayerCharacterComponent* m_pPlayer2;
-#endif // COOP
-#ifdef VERSUS
-	MaitaComponent* m_pPlayer2;
-#endif
-	TextComponent* m_pText;
+	MaitaComponent* m_pPlayerMaita;
+
+	TextComponent* m_pLevelText;
+	TextComponent* m_pLifesText;
+	ScoreComponent* m_pScore1;
+	ScoreComponent* m_pScore2;
 	LevelBounds m_Bounds;
+	eGameMode m_Mode;
 
 	bool m_IsTransitioning;
 	const float m_TransitionSpeed{ 250.f };

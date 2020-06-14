@@ -28,6 +28,7 @@ public:
 
 	virtual void PreInitialize() override;
 	virtual void Initialize() override;
+	virtual void PostInitialize() override;
 	virtual void Update() override;
 
 
@@ -54,7 +55,7 @@ private:
 	SpriteComponent* m_pSprite;
 	SpriteComponent* m_pSpriteAdditional;
 	FiniteStateMachine* m_pFSM;
-	ScoreComponent* m_pScore;
+	//ScoreComponent* m_pScore;
 	ColliderComponent* m_pCollider;
 	SpawnState* m_pSpawn;
 	eDirection m_Dir;

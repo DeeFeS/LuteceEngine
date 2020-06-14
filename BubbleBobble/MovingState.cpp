@@ -14,7 +14,7 @@ MovingState::MovingState(float* pInput, ColliderComponent* pCollider, const floa
 
 void MovingState::Enter()
 {
-	Logger::LogInfo(L"Enter: Moving");
+	//Logger::LogInfo(L"Enter: Moving");
 	m_pCollider->GetOnCollision().AddCallback(this, [this](const ColliderContact& contact) { HandleCollision(contact); });
 }
 
