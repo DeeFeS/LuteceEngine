@@ -71,7 +71,7 @@ void Level::LoadLevelFromFile()
 	int amount;
 	ifs >> amount;
 
-	for (size_t i = 0; i < amount; i++)
+	for (int i = 0; i < amount; i++)
 	{
 		int x, y, width, height;
 		ifs >> x;

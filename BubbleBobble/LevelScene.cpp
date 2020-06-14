@@ -157,7 +157,7 @@ void LevelScene::ShutDown() const
 void LevelScene::OnLevelCleared()
 {
 	m_CurrentLevel++;
-	if (m_CurrentLevel >= m_pLevel.size())
+	if (m_CurrentLevel >= int(m_pLevel.size()))
 	{
 		Level* pLevel = new Level{ m_CurrentLevel };
 		m_pLevel.push_back(pLevel);
