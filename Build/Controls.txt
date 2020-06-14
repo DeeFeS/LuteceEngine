@@ -1,0 +1,7 @@
+Keyboard
+Main Menu: <A D> SPACE to Start
+In Game: <A D>, W to Jump, SPACE to Shoot
+
+Controller
+Main Menu: <DPAD>, START to Start
+In Game: <LeftThumb>, X to Jump, A to Shoot
