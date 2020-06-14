@@ -2,6 +2,7 @@
 #include <State.h>
 #include "StateCondition.h"
 #include "ColliderComponent.h"
+#include "LevelScene.h"
 
 using namespace LuteceEngine;
 
@@ -16,6 +17,8 @@ private:
 	const float* m_pInput;
 	glm::vec2 m_Current;
 	ColliderComponent* m_pCollider;
+	const LevelBounds* m_pBounds;
+
 	void HandleCollision(const ColliderContact& contact);
 };
 

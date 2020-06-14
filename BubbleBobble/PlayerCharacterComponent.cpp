@@ -8,6 +8,8 @@
 #include "Scene.h"
 #include "StateCondition.h"
 #include "FallingState.h"
+#include "LevelScene.h"
+#include "GameEngine.h"
 
 using namespace LuteceEngine;
 
@@ -22,6 +24,7 @@ PlayerCharacterComponent::PlayerCharacterComponent(const int playerId, const eCo
 	, m_pImageAdditional{ nullptr }
 	, m_pSpawn{ nullptr }
 	, m_InputX{ 0.f }
+	, m_ShootCooldown{ 0.f }
 	, m_Jump{ false }
 	, m_Shoot{ false }
 	, m_IsFalling{ false }
@@ -55,8 +58,15 @@ void PlayerCharacterComponent::PreInitialize()
 	m_pScore = new ScoreComponent{ m_PlayerId };
 	auto pGo = new GameObject{};
 	pGo->AddComponent(m_pScore);
-	GetGameObject()->GetScene()->Add(pGo);
-	// TODO: Test if Score gets PreInitialized
+	//GetGameObject()->GetScene()->Add(pGo);
+	auto pCameraTrans = static_cast<LevelScene*>(GetGameObject()->GetScene())->GetCamera()->GetGameObject()->GetTransform();
+	pGo->GetTransform()->SetParent(pCameraTrans);
+
+	if (m_PlayerId == 1)
+	{
+		m_pScore->GetText()->SetAlignment(eAlignment::Right);
+		pGo->GetTransform()->Move(float(GameEngine::GetWindow().width), 0.f);
+	}
 
 	m_pImage = new ImageComponent{};
 	m_pImage->SetTexture("Sprites0.png");
@@ -88,11 +98,8 @@ void PlayerCharacterComponent::Initialize()
 void PlayerCharacterComponent::Update()
 {
 	m_pFSM->Update();
+	HandleShoot();
 	m_Jump = false;
-	//auto pos = GetTransform()->GetWorldPosition();
-	//if (m_LastPosition.y >= pos.y)
-	//	m_IsFalling = true;
-	//m_LastPosition = pos;
 	m_IsFalling = true;
 }
 
@@ -137,4 +144,20 @@ void PlayerCharacterComponent::InitializeFSM()
 	v.push_back({ {new BoolPointerCondition(&m_Jump)}, pJumping });
 	v.push_back({ {new BoolPointerCondition(&m_IsFalling)}, pFalling });
 	m_pFSM->AddState(pMoving, v);
+}
+
+void PlayerCharacterComponent::HandleShoot()
+{
+	m_ShootCooldown -= Service<Time>::Get()->GetDelta();
+	if (m_Shoot && m_ShootCooldown <= 0.f)
+	{
+		Shoot();
+		m_ShootCooldown = m_ShootCooldownTime;
+	}
+	m_Shoot = false;
+}
+
+void PlayerCharacterComponent::Shoot()
+{
+	Logger::LogInfo(L"SHOOT");
 }

@@ -7,6 +7,12 @@
 
 using namespace LuteceEngine;
 
+//enum class ePlayer : int
+//{
+//	Player1 = 0,
+//	Player2 = 1,
+//};
+
 class PlayerCharacterComponent : public Component
 {
 public:
@@ -29,6 +35,8 @@ private:
 	bool m_Jump;
 	bool m_Shoot;
 	bool m_IsFalling;
+	const float m_ShootCooldownTime = { 1.f };
+	float m_ShootCooldown;
 	glm::vec2 m_LastPosition;
 	int m_Lifes;
 	ImageComponent* m_pImage;
@@ -40,6 +48,8 @@ private:
 
 	void InitializeInput();
 	void InitializeFSM();
+	void HandleShoot();
+	void Shoot();
 
 	PlayerCharacterComponent(const PlayerCharacterComponent& other) = delete;
 	PlayerCharacterComponent(PlayerCharacterComponent&& other) = delete;

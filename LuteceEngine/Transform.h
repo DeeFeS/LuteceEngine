@@ -29,8 +29,7 @@ namespace LuteceEngine
 
 		void SetParent(Transform* pParent);
 		Transform* GetParent() { return m_pParent; };
-		void AddChild(Transform* pChild);
-		void RemoveChild(Transform* pChild);
+		
 		void DestroyChild(const size_t idx);
 		const std::vector<Transform*>& GetChildren() { return m_pChildren; };
 
@@ -51,5 +50,8 @@ namespace LuteceEngine
 		Transform* m_pParent;
 		std::vector<Transform*> m_pChildren;
 		GameObject* m_pGameObject;
+
+		void AddChild(Transform* pChild);
+		void RemoveChild(Transform* pChild);
 	};
 }

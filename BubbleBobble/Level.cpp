@@ -43,7 +43,7 @@ void Level::LoadLevelFromFile()
 
 	m_pLevel = new GameObject{};
 
-	size_t lineCounter = 1;
+	size_t lineCounter = 0;
 	while (ifs.good() && !ifs.eof())
 	{
 		ifs.getline(buffer, bufferSize);
@@ -83,7 +83,7 @@ void Level::LoadLevelFromFile()
 		auto pBox = new BoxShape{};
 		pBox->halfW = width * m_TileSize / 2.f;
 		pBox->halfH = height * m_TileSize / 2.f;
-		pBox->center = glm::vec2{ x * m_TileSize + pBox->halfW, (y + 1) * m_TileSize + pBox->halfH };
+		pBox->center = glm::vec2{ x * m_TileSize + pBox->halfW, y * m_TileSize + pBox->halfH };
 		auto pCollider = new ColliderComponent{ pBox, true };
 		m_pLevel->AddComponent(pCollider);
 		//Logger::LogFormat(eLogLevel::Info, L"Collider x: %7i | y: %7i | width: %7i | height: %7i", x,y,width,height);

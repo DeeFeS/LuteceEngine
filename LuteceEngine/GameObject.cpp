@@ -27,6 +27,13 @@ void LuteceEngine::GameObject::Initialize(Scene* pScene)
 
 	m_pScene = pScene;
 
+	auto pChildren = m_pTransform->GetChildren();
+	for (int i = int(pChildren.size()) - 1; i >= 0; i--)
+	{
+		auto pGo = pChildren[i]->GetGameObject();
+		pGo->Initialize(pScene);
+	}
+
 	for (size_t i = 0; i < m_pComponents.size(); i++)
 		m_pComponents[i]->PreInitialize();
 
@@ -42,6 +49,13 @@ void LuteceEngine::GameObject::Initialize(Scene* pScene)
 
 void LuteceEngine::GameObject::Update()
 {
+	auto pChildren = m_pTransform->GetChildren();
+	for (int i = int(pChildren.size()) - 1; i >= 0; i--)
+	{
+		auto pGo = pChildren[i]->GetGameObject();
+		pGo->Update();
+	}
+
 	for (size_t i = 0; i < m_pComponents.size(); i++)
 	{
 		if (!m_pComponents[i]->IsActive() || m_pComponents[i]->IsDestroyed())
@@ -52,6 +66,13 @@ void LuteceEngine::GameObject::Update()
 
 void LuteceEngine::GameObject::FixedUpdate()
 {
+	auto pChildren = m_pTransform->GetChildren();
+	for (int i = int(pChildren.size()) - 1; i >= 0; i--)
+	{
+		auto pGo = pChildren[i]->GetGameObject();
+		pGo->FixedUpdate();
+	}
+
 	for (size_t i = 0; i < m_pComponents.size(); i++)
 	{
 		if (!m_pComponents[i]->IsActive() || m_pComponents[i]->IsDestroyed())
@@ -62,6 +83,13 @@ void LuteceEngine::GameObject::FixedUpdate()
 
 void LuteceEngine::GameObject::Render(std::vector<RenderBuffer>& renderBuffer) const
 {
+	auto pChildren = m_pTransform->GetChildren();
+	for (int i = int(pChildren.size()) - 1; i >= 0; i--)
+	{
+		auto pGo = pChildren[i]->GetGameObject();
+		pGo->Render(renderBuffer);
+	}
+
 	for (size_t i = 0; i < m_pComponents.size(); i++)
 	{
 		if (!m_pComponents[i]->IsActive())

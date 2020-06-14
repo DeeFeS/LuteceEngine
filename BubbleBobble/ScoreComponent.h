@@ -18,6 +18,8 @@ class ScoreComponent : public Component
 public:
 	ScoreComponent(const int playerId);
 	virtual ~ScoreComponent() override;
+	TextComponent* GetText() { return m_pText; }
+
 protected:
 	virtual void PreInitialize() override;
 	virtual void OnEnable() override;

@@ -13,6 +13,7 @@ SpawnState::SpawnState(const glm::vec2& goalPos, Transform* pTrans, const float 
 
 void SpawnState::Enter()
 {
+	Logger::LogInfo(L"Enter: Spawn");
 	m_ReachedGoal = false;
 }
 

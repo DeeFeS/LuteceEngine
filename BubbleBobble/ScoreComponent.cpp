@@ -20,9 +20,7 @@ ScoreComponent::ScoreComponent(const int playerId)
 	m_pText = new TextComponent{ std::to_string(m_CurrentScore), pFont };
 }
 
-ScoreComponent::~ScoreComponent()
-{
-}
+ScoreComponent::~ScoreComponent(){}
 
 void ScoreComponent::PreInitialize()
 {

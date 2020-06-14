@@ -2,16 +2,26 @@
 #include "Scene.h"
 #include "Level.h"
 #include "EventSystem.h"
+#include "TextComponent.h"
 
 using namespace LuteceEngine;
 
 class PlayerCharacterComponent;
+
+struct LevelBounds
+{
+	glm::vec2 topLeft;
+	float width, height;
+};
 
 class LevelScene : public Scene
 {
 public:
 	LevelScene();
 	~LevelScene();
+	CameraComponent* GetCamera() { return m_pCamera; };
+	const LevelBounds& GetLevelBounds() { return m_Bounds; }
+
 protected:
 	// Inherited via Scene
 	virtual void Initialize() override;
@@ -28,9 +38,11 @@ private:
 	const int m_LevelHeight{ 25 };
 	const int m_TileSize;
 	int m_CurrentLevel;
-	GameObject* m_pCamera;
+	CameraComponent* m_pCamera;
 	PlayerCharacterComponent* m_pPlayer1;
 	PlayerCharacterComponent* m_pPlayer2;
+	TextComponent* m_pText;
+	LevelBounds m_Bounds;
 
 	void OnLevelCleared();
 

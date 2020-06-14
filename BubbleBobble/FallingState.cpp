@@ -13,11 +13,13 @@ FallingState::FallingState(const float* pInput, ColliderComponent* pCollider)
 	: State()
 	, m_pInput{ pInput }
 	, m_pCollider{ pCollider }
-	, m_Current{0.f, 0.f}
+	, m_Current{ 0.f, 0.f }
+	, m_pBounds{ &static_cast<LevelScene*>(pCollider->GetGameObject()->GetScene())->GetLevelBounds() }
 {}
 
 void FallingState::Enter()
 {
+	Logger::LogInfo(L"Enter: Falling");
 	m_pCollider->GetOnCollision().AddCallback(this, [this](const ColliderContact& contact) { HandleCollision(contact); });
 	m_Current.x = *m_pInput;
 	m_Current.y = 0.f;
@@ -27,7 +29,13 @@ void FallingState::Update()
 {
 	float dt = Service<Time>::Get()->GetDelta();
 	m_Current.y += GRAVITY * dt;
-	m_pCollider->GetGameObject()->GetTransform()->Move(m_Current.x * 50.f * dt, m_Current.y * dt);
+	auto pTrans = m_pCollider->GetGameObject()->GetTransform();
+	pTrans->Move(*m_pInput * 50.f * dt, m_Current.y * dt);
+	auto y = pTrans->GetWorldPosition().y;
+	if (y < m_pBounds->topLeft.y)
+		pTrans->Move(0.f, m_pBounds->height - 1.f);
+	else if(y > m_pBounds->topLeft.y + m_pBounds->height)
+		pTrans->Move(0.f, -m_pBounds->height + 1.f);
 }
 
 void FallingState::Exit()
@@ -43,7 +51,6 @@ void FallingState::HandleCollision(const ColliderContact& contact)
 		if (!pItems.empty())
 			return;
 
-		Logger::LogInfo(L"F-COLLISION");
 		if (abs(contact.depth.x) < abs(contact.depth.y))
 			m_pCollider->GetGameObject()->GetTransform()->Move(-contact.depth.x, 0.f);
 		else

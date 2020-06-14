@@ -8,16 +8,22 @@
 #include "PlayerCharacterComponent.h"
 #include "CharacterComponent.h"
 #include "PhysicsShape.h"
+#include "ResourceManager.h"
+#include "TextComponent.h"
 
 using namespace LuteceEngine;
+
+//#define TWO_PLAYERS
 
 LevelScene::LevelScene()
 	: Scene{ "LevelScene" }
 	, m_pCamera{ nullptr }
+	, m_pText{ nullptr }
 	, m_TileSize{ (int)BubbleBobble::GetTileSize() }
 	, m_CurrentLevel{ 0 }
 	, m_pPlayer1{ nullptr }
 	, m_pPlayer2{ nullptr }
+	, m_Bounds{}
 {}
 
 LevelScene::~LevelScene()
@@ -53,18 +59,24 @@ void LevelScene::Initialize()
 	pGo->AddComponent(m_pPlayer1);
 	Add(pGo);
 
+#ifdef TWO_PLAYERS
 	pGo = new GameObject{};
-	m_pPlayer2 = new PlayerCharacterComponent(0, eControllerIdx::Controller1);
+	m_pPlayer2 = new PlayerCharacterComponent(1, eControllerIdx::Controller1);
 	pGo->AddComponent(m_pPlayer2);
 	Add(pGo);
+#endif // TWO_PLAYERS
 
-	m_pCamera = new GameObject{};
-	auto pCamera = new CameraComponent{};
-	m_pCamera->AddComponent(pCamera);
-	SetActiveCamera(pCamera);
-	Add(m_pCamera);
+	pGo = new GameObject{};
+	m_pCamera = new CameraComponent{};
+	pGo->AddComponent(m_pCamera);
+	auto pFont = ResourceManager::GetInstance().LoadFont("Lingua.otf", 16);
+	m_pText = new TextComponent("01", pFont);
+	m_pText->SetAlignment(eAlignment::Center);
+	SetActiveCamera(m_pCamera);
+	pGo->AddComponent(m_pText);
+	Add(pGo);
 
-	//auto pInput = Service<InputManager>::Get();
+	auto pInput = Service<InputManager>::Get();
 	//auto pButton = new ButtonCommand(eControllerIdx::Keyboard, VK_LBUTTON, eControllerButton::None, eInputState::Pressed);
 	//pButton->SetCallback([]() -> bool { Logger::LogInfo(L"Keyboard PRESSED Left Mouse"); return false; });
 	//pInput->AddCommand(pButton);
@@ -79,15 +91,15 @@ void LevelScene::Initialize()
 
 	/*auto pAxis = new AxisCommand(eControllerIdx::Controller1, 'W', 'S', eControllerAxis::LeftThumbY);
 	pAxis->SetCallback([this](float value) -> bool { m_pCamera->GetTransform()->Scale(value, value); return false; });
-	pInput->AddCommand(pAxis);
+	pInput->AddCommand(pAxis);*/
 
-	pAxis = new AxisCommand(eControllerIdx::Controller1, 0, 0, eControllerAxis::RightThumbY);
+	auto pAxis = new AxisCommand(eControllerIdx::Controller1, 0, 0, eControllerAxis::RightThumbY);
 	pAxis->SetCallback([this](float value) -> bool { m_pCamera->GetTransform()->Move(0.f, -value * 10.f); return false; });
 	pInput->AddCommand(pAxis);
 
 	pAxis = new AxisCommand(eControllerIdx::Controller1, 0, 0, eControllerAxis::RightThumbX);
 	pAxis->SetCallback([this](float value) -> bool { m_pCamera->GetTransform()->Move(value * 10.f, 0.f); return false; });
-	pInput->AddCommand(pAxis);*/
+	pInput->AddCommand(pAxis);
 
 	m_pLevel.push_back(new Level(m_CurrentLevel));
 	m_pLevel[0]->Initialize();
@@ -100,18 +112,29 @@ void LevelScene::PostInitialize()
 	pGo->GetTransform()->SetPosition((window.width - m_LevelWidth * m_TileSize) / 2.f, (window.height - m_LevelHeight * m_TileSize) / 2.f, 1.f);
 	Add(pGo);
 
+	m_pText->SetOffset({ window.width / 2.f, m_TileSize * 2.5f });
+
 	auto levelPos = pGo->GetTransform()->GetWorldPosition();
+	m_Bounds.topLeft = levelPos + glm::vec2{ m_TileSize * 2.f, 0.f };
+	m_Bounds.width = float((m_LevelWidth - 4) * m_TileSize);
+	m_Bounds.height = float(m_LevelHeight * m_TileSize);
 
 	m_pPlayer1->GetTransform()->SetPosition(window.width / 2.f - 50.f, m_TileSize * 2.f, 0.f);
-	m_pPlayer1->SetStartPos({ levelPos.x + 3 * m_TileSize, levelPos.y + (m_LevelHeight - 2) * m_TileSize });
+	m_pPlayer1->SetStartPos({ levelPos.x + 4 * m_TileSize, levelPos.y + (m_LevelHeight - 1.5f) * m_TileSize });
+
+#ifdef TWO_PLAYERS
 	m_pPlayer2->GetTransform()->SetPosition(window.width / 2.f + 50.f, m_TileSize * 2.f, 0.1f);
-	m_pPlayer2->SetStartPos({ levelPos.x + (m_LevelWidth - 4) * m_TileSize, levelPos.y + (m_LevelHeight - 2) * m_TileSize });
+	m_pPlayer2->SetStartPos({ levelPos.x + (m_LevelWidth - 4) * m_TileSize, levelPos.y + (m_LevelHeight - 1.5f) * m_TileSize });
+#endif // TWO_PLAYERS
 }
 
 void LevelScene::SceneUpdate()
 {
-	Event_PointsScored e{ 200, -1 };
-	EventSystem<Event_PointsScored>::ConstInvoke(e);
+	/*Event_PointsScored e1{ 200, 0 };
+	EventSystem<Event_PointsScored>::ConstInvoke(e1);
+
+	Event_PointsScored e2{ 1, 1 };
+	EventSystem<Event_PointsScored>::ConstInvoke(e2);*/
 }
 
 void LevelScene::SceneFixedUpdate()
@@ -139,9 +162,20 @@ void LevelScene::OnLevelCleared()
 		Level* pLevel = new Level{ m_CurrentLevel };
 		m_pLevel.push_back(pLevel);
 		pLevel->Initialize();
-		auto pGo = pLevel->GetEnemyObject();
+		auto pGo = pLevel->GetLevelObject();
 		auto window = GameEngine::GetWindow();
 		pGo->GetTransform()->SetPosition(0.f, float(m_CurrentLevel * window.height), 1.f);
 		pGo->GetTransform()->Move((window.width - m_LevelWidth * m_TileSize) / 2.f, (window.height - m_LevelHeight * m_TileSize) / 2.f);
+
+		auto levelPos = pGo->GetTransform()->GetWorldPosition();
+		m_Bounds.topLeft = levelPos + glm::vec2{ m_TileSize * 2.f, 0.f };
 	}
+	if (m_CurrentLevel + 1 < 10)
+	{
+		std::stringstream ss{};
+		ss << 0 << m_CurrentLevel;
+		m_pText->SetText(ss.str());
+	}
+	else
+		m_pText->SetText(std::to_string(m_CurrentLevel + 1));
 }

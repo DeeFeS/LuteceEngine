@@ -13,6 +13,7 @@ MovingState::MovingState(float* pInput, ColliderComponent* pCollider)
 
 void MovingState::Enter()
 {
+	Logger::LogInfo(L"Enter: Moving");
 	m_pCollider->GetOnCollision().AddCallback(this, [this](const ColliderContact& contact) { HandleCollision(contact); });
 }
 
@@ -21,7 +22,6 @@ void MovingState::Update()
 	float dt = Service<Time>::Get()->GetDelta();
 	const float movementSpeed = 50.f;
 	auto dir = *m_pInput * movementSpeed;
-	Logger::LogInfo(L"MOVING");
 	m_pCollider->GetGameObject()->GetTransform()->Move(dir * dt, GRAVITY * dt);
 }
 
