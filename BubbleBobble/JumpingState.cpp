@@ -47,9 +47,6 @@ void JumpingState::Exit()
 
 void JumpingState::HandleCollision(const ColliderContact& contact)
 {
-	Logger::LogFormat(eLogLevel::Info, L"(%7.2f, %7.2f)", contact.depth.x, contact.depth.y);
-
-
 	if (!contact.pOther->IsStatic())
 		return;
 

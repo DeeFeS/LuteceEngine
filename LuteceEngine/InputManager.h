@@ -50,6 +50,7 @@ namespace LuteceEngine
 		Controller3,
 		Controller4,
 		Keyboard,
+		None,
 	};
 
 	class ButtonCommand : public CallbackCommand<bool>

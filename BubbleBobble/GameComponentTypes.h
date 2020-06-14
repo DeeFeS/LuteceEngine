@@ -6,4 +6,8 @@ enum class eGameComponentType : int
 	Player = int(eEngineComponentType::_End),
 	Score,
 	Item,
+	Projectile,
+	Enemy,
+	Maita,
+	ZenChan,
 };

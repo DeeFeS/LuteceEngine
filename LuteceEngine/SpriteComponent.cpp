@@ -13,8 +13,12 @@ LuteceEngine::SpriteComponent::SpriteComponent(const std::string& file, const in
 	, m_Begin{ begin }
 	, m_End{ end }
 	, m_Current{ begin }
+	, m_CurrentProgress{ 0.f }
 	, m_TimePerFrame{ fps }
 	, m_List{}
+	, m_UseList{ false }
+	, m_DestWidth{ 0.f }
+	, m_DestHeight{ 0.f }
 {
 	SetTexture(file);
 }
@@ -27,10 +31,48 @@ LuteceEngine::SpriteComponent::SpriteComponent(const std::string& file, const in
 	, m_Begin{ 0 }
 	, m_End{ 0 }
 	, m_Current{ 0 }
+	, m_CurrentProgress{ 0.f }
 	, m_TimePerFrame{ 1.f / fps }
-	, m_List{list}
+	, m_List{ list }
+	, m_UseList{ true }
+	, m_DestWidth{ 0.f }
+	, m_DestHeight{ 0.f }
 {
 	SetTexture(file);
+}
+
+LuteceEngine::SpriteComponent::SpriteComponent(const SpriteData& data)
+	: Component((int)eEngineComponentType::Sprite)
+	, m_pTexture{ data.pTexture }
+	, m_FrameWidth{ data.frameWidth }
+	, m_FrameHeight{ data.frameHeight }
+	, m_Begin{ data.begin }
+	, m_End{ data.end }
+	, m_Current{ data.useList ? 0 : data.begin }
+	, m_CurrentProgress{ 0.f }
+	, m_TimePerFrame{ 1.f / data.fps }
+	, m_List{ data.list }
+	, m_UseList{ data.useList }
+	, m_DestWidth{ data.destWidth }
+	, m_DestHeight{ data.destHeight }
+	, m_Offset {data.offset}
+{}
+
+void LuteceEngine::SpriteComponent::SetSprite(const SpriteData& data)
+{
+	m_pTexture = data.pTexture;
+	m_FrameWidth = data.frameWidth;
+	m_FrameHeight = data.frameHeight;
+	m_Begin = data.begin;
+	m_End = data.end;
+	m_Current = data.useList ? 0 : data.begin;
+	m_CurrentProgress = 0.f;
+	m_TimePerFrame = 1.f / data.fps;
+	m_List = data.list;
+	m_UseList = data.useList;
+	m_DestWidth = data.destWidth;
+	m_DestHeight = data.destHeight;
+	m_Offset = data.offset;
 }
 
 void LuteceEngine::SpriteComponent::SetIndices(const size_t begin, const size_t end)
@@ -58,7 +100,7 @@ void LuteceEngine::SpriteComponent::Update()
 {
 	float dt = Service<Time>::Get()->GetDelta();
 	m_CurrentProgress += dt;
-	while (m_CurrentProgress > m_TimePerFrame)
+	if (m_CurrentProgress > m_TimePerFrame)
 	{
 		m_CurrentProgress -= m_TimePerFrame;
 		m_Current++;
@@ -67,7 +109,7 @@ void LuteceEngine::SpriteComponent::Update()
 	if (m_UseList)
 		m_Current = m_Current % m_List.size();
 	else if (m_Current > m_End)
-		m_Current = m_Begin + (m_Current - m_End);
+		m_Current = m_Begin + (m_Current - m_End) - 1;
 }
 
 void LuteceEngine::SpriteComponent::Render(std::vector<RenderBuffer>& renderBuffer) const
@@ -81,7 +123,7 @@ void LuteceEngine::SpriteComponent::Render(std::vector<RenderBuffer>& renderBuff
 
 	SDL_Rect src{ 0, 0, m_FrameWidth, m_FrameHeight };
 	auto idx = m_UseList ? m_List[m_Current] : m_Current;
-	src.x = idx % (m_pTexture->GetWidth() / m_FrameWidth);
+	src.x = idx % (m_pTexture->GetWidth() / m_FrameWidth) * m_FrameWidth;
 	src.y = int(idx / (m_pTexture->GetWidth() / m_FrameWidth)) * m_FrameHeight;
 
 	Service<Renderer>::Get()->AddTextureToBuffer(renderBuffer, m_pTexture, pTrans->GetDepth(), dest, src);

@@ -5,6 +5,7 @@
 #include "InputManager.h"
 #include "SpawnState.h"
 #include "Components.h"
+#include "Definitions.h"
 
 using namespace LuteceEngine;
 
@@ -23,6 +24,7 @@ public:
 	const int GetId() { return m_PlayerId; }
 	void Damage();
 	void SetStartPos(const glm::vec2& pos);
+	int GetWorth() { return m_Worth; }
 
 	virtual void PreInitialize() override;
 	virtual void Initialize() override;
@@ -38,8 +40,9 @@ private:
 	bool m_IsFalling;
 	const float m_ShootCooldownTime = { 1.f };
 	float m_ShootCooldown;
-	glm::vec2 m_LastPosition;
 	int m_Lifes;
+	const int m_Worth{ 200 };
+
 	ImageComponent* m_pImage;
 	ImageComponent* m_pImageAdditional;
 	SpriteComponent* m_pSprite;
@@ -47,6 +50,7 @@ private:
 	ScoreComponent* m_pScore;
 	ColliderComponent* m_pCollider;
 	SpawnState* m_pSpawn;
+	eDirection m_LastDirection;
 
 	void InitializeInput();
 	void InitializeFSM();

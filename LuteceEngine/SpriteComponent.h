@@ -3,11 +3,25 @@
 
 namespace LuteceEngine
 {
+	struct SpriteData
+	{
+		Texture2D* pTexture{ nullptr };
+		glm::vec2 offset{};
+		float destWidth{}, destHeight{};
+		bool useList{ false };
+		float fps{ 60 };
+		int frameWidth{ 16 }, frameHeight{ 16 };
+		size_t begin{ 0 }, end{ 8 };
+		std::vector<size_t> list{};
+	};
+
 	class SpriteComponent :	public Component
 	{
 	public:
 		SpriteComponent(const std::string& file, const int frameWidth, const int frameHeight, const size_t begin, const size_t end, const float fps);
 		SpriteComponent(const std::string& file, const int frameWidth, const int frameHeight, const std::vector<size_t> list, const float fps);
+		SpriteComponent(const SpriteData& data);
+		void SetSprite(const SpriteData& data);
 		void SetIndices(const size_t begin, const size_t end);
 		void SetIndices(const std::vector<size_t>& list);
 		void SetTexture(const std::string& filename);

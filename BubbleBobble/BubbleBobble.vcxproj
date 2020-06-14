@@ -161,16 +161,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BubbleBobble.cpp" />
+    <ClCompile Include="EnemyComponent.cpp" />
     <ClCompile Include="FallingState.cpp" />
     <ClCompile Include="ItemComponent.cpp" />
     <ClCompile Include="JumpingState.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="LevelScene.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MaitaComponent.cpp" />
     <ClCompile Include="MovingState.cpp" />
     <ClCompile Include="PlayerCharacterComponent.cpp" />
+    <ClCompile Include="ProjectileComponent.cpp" />
     <ClCompile Include="ScoreComponent.cpp" />
     <ClCompile Include="SpawnState.cpp" />
+    <ClCompile Include="ZenChanComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LuteceEngine\LuteceEngine.vcxproj">
@@ -180,16 +184,20 @@
   <ItemGroup>
     <ClInclude Include="BubbleBobble.h" />
     <ClInclude Include="Definitions.h" />
+    <ClInclude Include="EnemyComponent.h" />
     <ClInclude Include="FallingState.h" />
     <ClInclude Include="GameComponentTypes.h" />
     <ClInclude Include="ItemComponent.h" />
     <ClInclude Include="JumpingState.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="LevelScene.h" />
+    <ClInclude Include="MaitaComponent.h" />
     <ClInclude Include="MovingState.h" />
     <ClInclude Include="PlayerCharacterComponent.h" />
+    <ClInclude Include="ProjectileComponent.h" />
     <ClInclude Include="ScoreComponent.h" />
     <ClInclude Include="SpawnState.h" />
+    <ClInclude Include="ZenChanComponent.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

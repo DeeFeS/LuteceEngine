@@ -15,15 +15,14 @@ ScoreComponent::ScoreComponent(const int playerId)
 	, m_CurrentScore{0}
 	, m_pText{nullptr}
 	, m_PlayerId{playerId}
-{
-	auto pFont = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
-	m_pText = new TextComponent{ std::to_string(m_CurrentScore), pFont };
-}
+{}
 
 ScoreComponent::~ScoreComponent(){}
 
 void ScoreComponent::PreInitialize()
 {
+	auto pFont = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
+	m_pText = new TextComponent{ std::to_string(m_CurrentScore), pFont };
 	GetGameObject()->AddComponent(m_pText);
 }
 

@@ -33,6 +33,7 @@ namespace LuteceEngine
 		void DestroyChild(const size_t idx);
 		const std::vector<Transform*>& GetChildren() { return m_pChildren; };
 
+		void SetPosition(const glm::vec2& v) { m_Position = v; };
 		void SetPosition(const float x, const float y) { m_Position = glm::vec2{ x, y }; };
 		void SetPosition(const float x, const float y, const float depth);
 		void SetDepth(float depth) { m_Depth = depth; };

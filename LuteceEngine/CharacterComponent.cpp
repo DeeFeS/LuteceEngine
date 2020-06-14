@@ -45,7 +45,7 @@ void LuteceEngine::CharacterComponent::OnEnable()
 	m_pColl->GetOnCollision().AddCallback(this,
 		[this](const ColliderContact& contact)
 		{
-			Logger::LogFormat(eLogLevel::Info, L"%7.2f | %7.2f", contact.depth.x, contact.depth.y);
+			//Logger::LogFormat(eLogLevel::Info, L"%7.2f | %7.2f", contact.depth.x, contact.depth.y);
 			if (abs(contact.depth.x) < abs(contact.depth.y))
 				GetTransform()->Move(-contact.depth.x, 0.f);
 			else

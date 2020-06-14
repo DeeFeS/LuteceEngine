@@ -6,13 +6,20 @@
 
 using namespace LuteceEngine;
 
+//#define COOP
+#define VERSUS
+
 class PlayerCharacterComponent;
+
+struct Event_LevelCleared{};
 
 struct LevelBounds
 {
 	glm::vec2 topLeft;
 	float width, height;
 };
+
+class MaitaComponent;
 
 class LevelScene : public Scene
 {
@@ -40,11 +47,16 @@ private:
 	int m_CurrentLevel;
 	CameraComponent* m_pCamera;
 	PlayerCharacterComponent* m_pPlayer1;
+#ifdef COOP
 	PlayerCharacterComponent* m_pPlayer2;
+#endif // COOP
+#ifdef VERSUS
+	MaitaComponent* m_pPlayer2;
+#endif
 	TextComponent* m_pText;
 	LevelBounds m_Bounds;
 
-	void OnLevelCleared();
+	void OnLevelCleared(const Event_LevelCleared& e);
 
 	LevelScene(const LevelScene& other) = delete;
 	LevelScene(LevelScene&& other) = delete;
