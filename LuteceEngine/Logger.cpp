@@ -1,6 +1,8 @@
 #include "GameEnginePCH.h"
 #include "Logger.h"
 
+// DISCLAIMER:: Reduced version of the Overlord-Engine Logger by Matthieu Delaere
+
 wchar_t* LuteceEngine::Logger::m_pConvertBuffer = new wchar_t[m_ConvertBufferSize];
 HANDLE LuteceEngine::Logger::m_pConsoleHandle = nullptr;
 

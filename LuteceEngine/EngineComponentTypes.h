@@ -6,6 +6,7 @@ enum class eEngineComponentType : int
 	Camera,
 	Text,
 	Image,
+	Sprite,
 	Character,
 
 	_End

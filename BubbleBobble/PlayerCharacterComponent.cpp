@@ -22,6 +22,7 @@ PlayerCharacterComponent::PlayerCharacterComponent(const int playerId, const eCo
 	, m_pCollider{ nullptr }
 	, m_pImage{ nullptr }
 	, m_pImageAdditional{ nullptr }
+	, m_pSprite{ nullptr }
 	, m_pSpawn{ nullptr }
 	, m_InputX{ 0.f }
 	, m_ShootCooldown{ 0.f }

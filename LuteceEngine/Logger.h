@@ -2,7 +2,7 @@
 #include <iostream>
 #include <Windows.h>
 
-// DISCLAIMER:: Dumbed down version of the Overlord-Engine Logger by Matthieu Delaere
+// DISCLAIMER:: Reduced version of the Overlord-Engine Logger by Matthieu Delaere
 
 namespace LuteceEngine
 {

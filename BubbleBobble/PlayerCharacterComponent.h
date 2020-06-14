@@ -4,6 +4,7 @@
 #include "ScoreComponent.h"
 #include "InputManager.h"
 #include "SpawnState.h"
+#include "Components.h"
 
 using namespace LuteceEngine;
 
@@ -41,6 +42,7 @@ private:
 	int m_Lifes;
 	ImageComponent* m_pImage;
 	ImageComponent* m_pImageAdditional;
+	SpriteComponent* m_pSprite;
 	FiniteStateMachine* m_pFSM;
 	ScoreComponent* m_pScore;
 	ColliderComponent* m_pCollider;
