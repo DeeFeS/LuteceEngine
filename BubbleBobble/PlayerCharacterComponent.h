@@ -30,7 +30,13 @@ public:
 	virtual void Initialize() override;
 	virtual void Update() override;
 
+
 private:
+	enum class eSprite
+	{
+		Left, Right, Bubble, SpawnUp, SpawnDown
+	};
+
 	const int m_PlayerId;
 	const eControllerIdx m_ControllerId;
 	//glm::vec2 m_Dir;
@@ -42,20 +48,23 @@ private:
 	float m_ShootCooldown;
 	int m_Lifes;
 	const int m_Worth{ 200 };
+	bool m_IsSpawning;
+	std::map<eSprite,SpriteData> m_Sprites;
 
-	ImageComponent* m_pImage;
-	ImageComponent* m_pImageAdditional;
 	SpriteComponent* m_pSprite;
+	SpriteComponent* m_pSpriteAdditional;
 	FiniteStateMachine* m_pFSM;
 	ScoreComponent* m_pScore;
 	ColliderComponent* m_pCollider;
 	SpawnState* m_pSpawn;
-	eDirection m_LastDirection;
+	eDirection m_Dir;
 
+	void InitializeSpriteData();
 	void InitializeInput();
 	void InitializeFSM();
 	void HandleShoot();
 	void Shoot();
+	void SetDirection(eDirection dir);
 
 	PlayerCharacterComponent(const PlayerCharacterComponent& other) = delete;
 	PlayerCharacterComponent(PlayerCharacterComponent&& other) = delete;

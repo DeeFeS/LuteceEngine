@@ -209,11 +209,23 @@ void LevelScene::PostInitialize()
 
 void LevelScene::SceneUpdate()
 {
-	/*Event_PointsScored e1{ 200, 0 };
-	EventSystem<Event_PointsScored>::ConstInvoke(e1);
-
-	Event_PointsScored e2{ 1, 1 };
-	EventSystem<Event_PointsScored>::ConstInvoke(e2);*/
+	if (m_IsTransitioning)
+	{
+		float dt = Service<Time>::Get()->GetDelta();
+		auto v = m_TransitionGoal - m_pCamera->GetTransform()->GetWorldPosition();
+		float distance = Magnitude(v);
+		if (distance < dt * m_TransitionSpeed)
+		{
+			m_pCamera->GetTransform()->Move(v.x, v.y);
+			m_IsTransitioning = false;
+		}
+		else
+		{
+			v = v / distance * dt * m_TransitionSpeed;
+			m_pCamera->GetTransform()->Move(v.x, v.y);
+		}
+		return;
+	}
 
 	if (m_LevelElements == 0)
 	{
@@ -262,7 +274,6 @@ void LevelScene::OnLevelCleared()
 		auto levelPos = pGo->GetTransform()->GetWorldPosition();
 		m_Bounds.topLeft = levelPos + glm::vec2{ m_TileSize * 2.f, 0.f };
 		m_pPlayer1->SetStartPos({ levelPos.x + 4 * m_TileSize, levelPos.y + (m_LevelHeight - 1.5f) * m_TileSize });
-		m_pCamera->GetTransform()->SetPosition(0.f, float(m_CurrentLevel * window.height));
 
 		auto pEnemies = m_pLevel[m_CurrentLevel]->GetEnemies();
 		m_LevelElements = pEnemies.size();
@@ -286,6 +297,9 @@ void LevelScene::OnLevelCleared()
 
 			Add(pEnemies[i]->GetGameObject());
 		}
+
+		m_IsTransitioning = true;
+		m_TransitionGoal = { 0.f, float(m_CurrentLevel * window.height) };
 	}
 	if (m_CurrentLevel + 1 < 10)
 	{

@@ -60,6 +60,10 @@ private:
 	TextComponent* m_pText;
 	LevelBounds m_Bounds;
 
+	bool m_IsTransitioning;
+	const float m_TransitionSpeed{ 250.f };
+	glm::vec2 m_TransitionGoal;
+
 	void OnLevelCleared();
 
 	LevelScene(const LevelScene& other) = delete;

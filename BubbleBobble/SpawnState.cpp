@@ -39,5 +39,4 @@ void SpawnState::Update()
 
 void SpawnState::Exit()
 {
-	m_ReachedGoal = false;
 }

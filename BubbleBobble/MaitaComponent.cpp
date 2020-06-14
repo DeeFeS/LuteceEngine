@@ -64,6 +64,7 @@ void MaitaComponent::PreInitialize()
 				SetState(eEnemyState::Popped);
 				Event_PointsScored e{ m_Worth, pPlayer[0]->GetId() };
 				EventSystem<Event_PointsScored>::ConstInvoke(e);
+				contact.pCollider->GetGameObject()->Destroy();
 			}
 			if (m_CurrentState == eEnemyState::Normal)
 			{
@@ -75,7 +76,6 @@ void MaitaComponent::PreInitialize()
 				}
 			}
 
-			contact.pCollider->GetGameObject()->Destroy();
 		});
 }
 
