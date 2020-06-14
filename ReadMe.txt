@@ -21,4 +21,10 @@ It's also something that was inspired by the Unity EventSystem.
 
 Due to time constraints I only started implementing a ResourceManager and the ScriptableObject structure from Unity, but it's not implemented, yet.
 
+Another thing that I implemented where development safeguards which are logged but disabled in the release build.
+I used error for >this will crash in release< and warning for >undesirable behavior< (adding a callback for the second time, etc.
+
+I guess that's all I have to say for now.
+Would you kindly enjoy my version of BubbleBobble.
+
 https://github.com/DeeFeS/LuteceEngine
