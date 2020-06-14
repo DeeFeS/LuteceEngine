@@ -35,7 +35,7 @@ PlayerCharacterComponent::PlayerCharacterComponent(const int playerId, const eCo
 	, m_Shoot{ false }
 	, m_IsFalling{ false }
 	, m_IsSpawning{ false }
-	, m_Lifes{ 4 }
+	, m_pLifes{ nullptr }
 	, m_Dir{ eDirection::Left }
 {
 }
@@ -47,11 +47,12 @@ PlayerCharacterComponent::~PlayerCharacterComponent()
 
 void PlayerCharacterComponent::Damage()
 {
-	m_Lifes--;
-	if (m_Lifes <= 0)
-	{
-		// TODO: Game Over
-	}
+	if (m_InvicibleTimer > 0.f || m_IsSpawning)
+		return;
+
+	*m_pLifes = *m_pLifes - 1;
+	m_InvicibleTimer = 3.f;
+	SetStartPos(m_pSpawn->GetStartPos());
 }
 
 void PlayerCharacterComponent::SetStartPos(const glm::vec2& pos)
@@ -127,10 +128,13 @@ void PlayerCharacterComponent::Initialize()
 
 void PlayerCharacterComponent::PostInitialize()
 {
+	m_pLifes = static_cast<LevelScene*>(GetGameObject()->GetScene())->GetLifes();
 }
 
 void PlayerCharacterComponent::Update()
 {
+	
+
 	m_pFSM->Update();
 	if (m_IsSpawning)
 	{
@@ -140,6 +144,11 @@ void PlayerCharacterComponent::Update()
 			m_pSpriteAdditional->SetActive(false);
 			m_pSprite->SetSprite(m_Sprites[eSprite::Left]);
 		}
+	}
+	else
+	{
+		if (m_InvicibleTimer > 0.f)
+			m_InvicibleTimer -= Service<Time>::Get()->GetDelta();
 	}
 
 	HandleShoot();

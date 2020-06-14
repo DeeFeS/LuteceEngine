@@ -47,9 +47,10 @@ private:
 	bool m_IsFalling;
 	const float m_ShootCooldownTime = { 1.f };
 	float m_ShootCooldown;
-	int m_Lifes;
+	int* m_pLifes;
 	const int m_Worth{ 200 };
 	bool m_IsSpawning;
+	float m_InvicibleTimer;
 	std::map<eSprite,SpriteData> m_Sprites;
 
 	SpriteComponent* m_pSprite;

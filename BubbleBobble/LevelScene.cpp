@@ -49,6 +49,7 @@ LevelScene::LevelScene(const eGameMode mode)
 	, m_pPlayerMaita{ nullptr }
 	, m_Bounds{}
 	, m_Mode{ mode }
+	, m_Lifes{ 4 }
 {}
 
 LevelScene::~LevelScene()
@@ -210,6 +211,23 @@ void LevelScene::PostInitialize()
 
 void LevelScene::SceneUpdate()
 {
+	m_pLifesText->SetText(std::to_string(m_Lifes));
+	if (m_Lifes <= 0)
+	{
+		auto pManager = Service<SceneManager>::Get();
+		auto pScenes = pManager->GetScenes();
+		for (size_t i = 0; i < pScenes.size(); i++)
+		{
+			if (pScenes[i] != this)
+			{
+				pManager->SetActiveScene(pScenes[i]);
+				pManager->DeleteScene(this);
+				return;
+			}
+		}
+		return;
+	}
+
 	if (m_IsTransitioning)
 	{
 		float dt = Service<Time>::Get()->GetDelta();
@@ -264,6 +282,17 @@ void LevelScene::OnLevelCleared()
 		if (!pLevel->GetLevelObject())
 		{
 			// TODO: Game Over
+			auto pManager = Service<SceneManager>::Get();
+			auto pScenes = pManager->GetScenes();
+			for (size_t i = 0; i < pScenes.size(); i++)
+			{
+				if (pScenes[i] != this)
+				{
+					pManager->SetActiveScene(pScenes[i]);
+					pManager->DeleteScene(this);
+					return;
+				}
+			}
 			return;
 		}
 		auto pGo = pLevel->GetLevelObject();

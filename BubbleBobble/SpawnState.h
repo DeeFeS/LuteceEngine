@@ -18,6 +18,7 @@ public:
 	SpawnState(const glm::vec2& goalPos, Transform* pTrans, const float speed);
 	const bool* GetReachedGoal() { return &m_ReachedGoal; }
 	void SetGoalPos(const glm::vec2& goalPos) { m_GoalPos = goalPos; m_ReachedGoal = false; };
+	glm::vec2 GetStartPos() { return m_GoalPos; };
 	virtual void Enter() override;
 	virtual void Update() override;
 	virtual void Exit() override;

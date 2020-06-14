@@ -64,7 +64,14 @@ void MaitaComponent::PreInitialize()
 				SetState(eEnemyState::Popped);
 				Event_PointsScored e{ m_Worth, pPlayer[0]->GetId() };
 				EventSystem<Event_PointsScored>::ConstInvoke(e);
-				contact.pCollider->GetGameObject()->Destroy();
+
+				if (m_Controller == eControllerIdx::None)
+					contact.pCollider->GetGameObject()->Destroy();
+				else
+				{
+					GetTransform()->SetPosition(m_StartPos);
+					m_Timer = 3.f;
+				}
 			}
 			if (m_CurrentState == eEnemyState::Normal)
 			{
@@ -75,7 +82,6 @@ void MaitaComponent::PreInitialize()
 					EventSystem<Event_PointsScored>::ConstInvoke(e);
 				}
 			}
-
 		});
 }
 
@@ -325,6 +331,13 @@ void MaitaComponent::Shoot()
 				return;
 
 			pPlayer[0]->Damage();
+			if (m_Controller != eControllerIdx::None)
+			{
+				Event_PointsScored e{ pPlayer[0]->GetWorth(), 1 };
+				EventSystem<Event_PointsScored>::ConstInvoke(e);
+			}
+
+			contact.pCollider->GetGameObject()->Destroy();
 		});
 
 	const float projectileSpeed = 100.f;

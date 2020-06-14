@@ -45,6 +45,7 @@ public:
 
 	void SetMode(const eGameMode mode) { m_Mode = mode; };
 	eGameMode GetMode() { return m_Mode; };
+	int* GetLifes() { return &m_Lifes; }
 
 protected:
 	// Inherited via Scene
@@ -74,6 +75,7 @@ private:
 	ScoreComponent* m_pScore2;
 	LevelBounds m_Bounds;
 	eGameMode m_Mode;
+	int m_Lifes;
 
 	bool m_IsTransitioning;
 	const float m_TransitionSpeed{ 250.f };

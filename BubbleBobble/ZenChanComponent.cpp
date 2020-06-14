@@ -68,6 +68,10 @@ void ZenChanComponent::PreInitialize()
 				Event_PointsScored e{ m_Worth, pPlayer[0]->GetId() };
 				EventSystem<Event_PointsScored>::ConstInvoke(e);
 			}
+			if (m_CurrentState == eEnemyState::Normal)
+			{
+				pPlayer[0]->Damage();
+			}
 		});
 }
 

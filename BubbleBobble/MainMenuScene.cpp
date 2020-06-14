@@ -128,6 +128,7 @@ void MainMenuScene::SceneUpdate()
 		m_pLevel = new LevelScene{ (eGameMode)m_Mode };
 		Service<SceneManager>::Get()->AddScene(m_pLevel);
 		Service<SceneManager>::Get()->SetActiveScene(m_pLevel);
+		m_Start = false;
 	}
 }
 

@@ -10,9 +10,6 @@
     <ClCompile Include="GameEnginePCH.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Time.cpp">
-      <Filter>Singletons</Filter>
-    </ClCompile>
     <ClCompile Include="Component.cpp">
       <Filter>Components</Filter>
     </ClCompile>
@@ -86,6 +83,9 @@
     <ClCompile Include="SpriteComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="Time.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ResourceManager.h">
@@ -99,9 +99,6 @@
     </ClInclude>
     <ClInclude Include="GameEnginePCH.h">
       <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Time.h">
-      <Filter>Singletons</Filter>
     </ClInclude>
     <ClInclude Include="Component.h">
       <Filter>Components</Filter>
@@ -188,6 +185,9 @@
     </ClInclude>
     <ClInclude Include="SpriteComponent.h">
       <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Time.h">
+      <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
